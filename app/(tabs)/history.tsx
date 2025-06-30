@@ -17,8 +17,225 @@ import { useCompletedDropoffs } from "@/hooks/useCompletedDropoffs";
 import { useUserTransactions } from "@/hooks/useUserTransactions";
 import DropoffHistoryItem from "@/components/DropoffHistoryItem";
 import TransactionHistoryItem from "@/components/TransactionHistoryItem";
+import Animated, { FadeIn, FadeOut } from "react-native-reanimated";
 
 const { width } = Dimensions.get("window");
+
+function TransactionHistorySkeleton() {
+  return (
+    <View style={{ paddingHorizontal: 16, paddingBottom: 16 }}>
+      {[...Array(5)].map((_, idx) => (
+        <Animated.View
+          key={idx}
+          entering={FadeIn}
+          exiting={FadeOut}
+          style={{
+            backgroundColor: "white",
+            borderRadius: 16,
+            marginBottom: 12,
+            shadowColor: "#000",
+            shadowOffset: { width: 0, height: 1 },
+            shadowOpacity: 0.05,
+            shadowRadius: 3,
+            elevation: 2,
+            overflow: "hidden",
+            width: width - 32,
+            alignSelf: "center",
+          }}
+        >
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "center",
+              paddingHorizontal: 16,
+              paddingVertical: 12,
+              borderBottomWidth: 1,
+              borderBottomColor: "#F3F4F6",
+            }}
+          >
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <View
+                style={{
+                  width: 100,
+                  height: 16,
+                  backgroundColor: "#E5E7EB",
+                  borderRadius: 8,
+                }}
+              />
+              <View
+                style={{
+                  width: 60,
+                  height: 20,
+                  backgroundColor: "#E5E7EB",
+                  borderRadius: 8,
+                  marginLeft: 12,
+                }}
+              />
+            </View>
+            <View
+              style={{
+                width: 80,
+                height: 20,
+                backgroundColor: "#E5E7EB",
+                borderRadius: 8,
+              }}
+            />
+          </View>
+          <View style={{ padding: 16 }}>
+            {[...Array(3)].map((__, i) => (
+              <View
+                key={i}
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  marginBottom: 12,
+                }}
+              >
+                <View
+                  style={{
+                    width: 32,
+                    height: 32,
+                    borderRadius: 16,
+                    backgroundColor: "#F3F4F6",
+                    marginRight: 12,
+                  }}
+                />
+                <View style={{ flex: 1 }}>
+                  <View
+                    style={{
+                      width: "60%",
+                      height: 14,
+                      backgroundColor: "#E5E7EB",
+                      borderRadius: 8,
+                      marginBottom: 6,
+                    }}
+                  />
+                  <View
+                    style={{
+                      width: "80%",
+                      height: 16,
+                      backgroundColor: "#E5E7EB",
+                      borderRadius: 8,
+                    }}
+                  />
+                </View>
+              </View>
+            ))}
+          </View>
+        </Animated.View>
+      ))}
+    </View>
+  );
+}
+
+function DropoffHistorySkeleton() {
+  return (
+    <View style={{ paddingHorizontal: 16, paddingBottom: 16 }}>
+      {[...Array(3)].map((_, idx) => (
+        <Animated.View
+          key={idx}
+          entering={FadeIn}
+          exiting={FadeOut}
+          style={{
+            backgroundColor: "white",
+            borderRadius: 16,
+            marginBottom: 16,
+            shadowColor: "#000",
+            shadowOffset: { width: 0, height: 2 },
+            shadowOpacity: 0.05,
+            shadowRadius: 3.84,
+            elevation: 2,
+            overflow: "hidden",
+            width: width - 32,
+            alignSelf: "center",
+          }}
+        >
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "center",
+              paddingHorizontal: 16,
+              paddingVertical: 12,
+              borderBottomWidth: 1,
+              borderBottomColor: "#E0F2E0",
+            }}
+          >
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <View
+                style={{
+                  width: 100,
+                  height: 16,
+                  backgroundColor: "#E5E7EB",
+                  borderRadius: 8,
+                }}
+              />
+              <View
+                style={{
+                  width: 50,
+                  height: 20,
+                  backgroundColor: "#E5E7EB",
+                  borderRadius: 8,
+                  marginLeft: 12,
+                }}
+              />
+            </View>
+            <View
+              style={{
+                width: 80,
+                height: 20,
+                backgroundColor: "#E5E7EB",
+                borderRadius: 8,
+              }}
+            />
+          </View>
+          <View style={{ padding: 16 }}>
+            {[...Array(3)].map((__, i) => (
+              <View
+                key={i}
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  marginBottom: 12,
+                }}
+              >
+                <View
+                  style={{
+                    width: 36,
+                    height: 36,
+                    borderRadius: 8,
+                    backgroundColor: "#F0F9F0",
+                    marginRight: 12,
+                  }}
+                />
+                <View style={{ flex: 1 }}>
+                  <View
+                    style={{
+                      width: "60%",
+                      height: 14,
+                      backgroundColor: "#E5E7EB",
+                      borderRadius: 8,
+                      marginBottom: 6,
+                    }}
+                  />
+                  <View
+                    style={{
+                      width: "80%",
+                      height: 16,
+                      backgroundColor: "#E5E7EB",
+                      borderRadius: 8,
+                    }}
+                  />
+                </View>
+              </View>
+            ))}
+          </View>
+        </Animated.View>
+      ))}
+    </View>
+  );
+}
 
 export default function HistoryScreen() {
   const [activeTab, setActiveTab] = useState<"dropoffs" | "transactions">(
@@ -131,12 +348,7 @@ export default function HistoryScreen() {
   const renderContent = () => {
     if (activeTab === "transactions") {
       if (isTransactionLoading) {
-        return (
-          <View style={styles.loadingContainer}>
-            <ActivityIndicator size="large" color="#00AA00" />
-            <Text style={styles.loadingText}>Memuat riwayat transaksi...</Text>
-          </View>
-        );
+        return <TransactionHistorySkeleton />;
       }
 
       if (isTransactionError) {
@@ -358,12 +570,7 @@ export default function HistoryScreen() {
     }
 
     if (isDropoffLoading) {
-      return (
-        <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color="#00AA00" />
-          <Text style={styles.loadingText}>Memuat riwayat dropoff...</Text>
-        </View>
-      );
+      return <DropoffHistorySkeleton />;
     }
 
     if (isDropoffError) {
