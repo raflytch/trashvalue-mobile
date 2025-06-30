@@ -28,6 +28,187 @@ interface StatsData {
   totalPoints: number;
 }
 
+function SkeletonBox({ style }: { style?: any }) {
+  return (
+    <View
+      style={[
+        {
+          backgroundColor: "#E5E7EB",
+          borderRadius: 8,
+          overflow: "hidden",
+        },
+        style,
+      ]}
+      className="animate-pulse"
+    />
+  );
+}
+
+function DashboardSkeleton() {
+  return (
+    <SafeAreaView className="flex-1 bg-gray-50">
+      <StatusBar barStyle="light-content" backgroundColor="#00CC00" />
+      <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
+        <LinearGradient
+          colors={["#08A92B", "#088F27"]}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+          className="pt-4 pb-10"
+        >
+          <View className="px-6 mb-2">
+            <View className="flex-row justify-between items-center mb-4">
+              <View>
+                <SkeletonBox
+                  style={{ width: 120, height: 28, marginBottom: 8 }}
+                />
+                <SkeletonBox style={{ width: 160, height: 20 }} />
+              </View>
+              <SkeletonBox
+                style={{ width: 56, height: 56, borderRadius: 28 }}
+              />
+            </View>
+          </View>
+        </LinearGradient>
+        <View className="px-4 -mt-6">
+          <View
+            className="bg-white rounded-2xl p-5 flex-row justify-between"
+            style={{
+              shadowColor: "#000",
+              shadowOffset: { width: 0, height: 2 },
+              shadowOpacity: 0.1,
+              shadowRadius: 6,
+              elevation: 5,
+            }}
+          >
+            {[1, 2, 3].map((_, idx) => (
+              <View key={idx} className="items-center flex-1 px-2 py-1">
+                <SkeletonBox
+                  style={{
+                    width: 56,
+                    height: 56,
+                    borderRadius: 28,
+                    marginBottom: 8,
+                  }}
+                />
+                <SkeletonBox
+                  style={{ width: 40, height: 18, marginBottom: 4 }}
+                />
+                <SkeletonBox style={{ width: 36, height: 12 }} />
+              </View>
+            ))}
+          </View>
+        </View>
+        <View className="px-5 py-6">
+          <View className="flex-row items-center mb-4">
+            <SkeletonBox
+              style={{
+                width: 24,
+                height: 24,
+                borderRadius: 12,
+                marginRight: 8,
+              }}
+            />
+            <SkeletonBox style={{ width: 120, height: 20 }} />
+          </View>
+          <View className="flex-row justify-between">
+            {[1, 2].map((_, idx) => (
+              <SkeletonBox
+                key={idx}
+                style={{
+                  width: "48%",
+                  height: 80,
+                  borderRadius: 16,
+                  marginBottom: 8,
+                }}
+              />
+            ))}
+          </View>
+        </View>
+        <View className="px-5 py-2">
+          <View className="flex-row items-center justify-between mb-4">
+            <View className="flex-row items-center">
+              <SkeletonBox
+                style={{
+                  width: 24,
+                  height: 24,
+                  borderRadius: 12,
+                  marginRight: 8,
+                }}
+              />
+              <SkeletonBox style={{ width: 140, height: 20 }} />
+            </View>
+            <SkeletonBox style={{ width: 60, height: 18 }} />
+          </View>
+          <View
+            className="bg-white rounded-2xl overflow-hidden mb-5"
+            style={{
+              shadowColor: "#000",
+              shadowOffset: { width: 0, height: 2 },
+              shadowOpacity: 0.05,
+              shadowRadius: 8,
+              elevation: 3,
+            }}
+          >
+            {[1, 2, 3].map((_, idx) => (
+              <View
+                key={idx}
+                className={`p-4 ${idx < 2 ? "border-b border-gray-100" : ""}`}
+              >
+                <View className="flex-row items-center">
+                  <SkeletonBox
+                    style={{
+                      width: 36,
+                      height: 36,
+                      borderRadius: 8,
+                      marginRight: 12,
+                    }}
+                  />
+                  <View className="flex-1">
+                    <SkeletonBox
+                      style={{ width: 100, height: 16, marginBottom: 6 }}
+                    />
+                    <SkeletonBox style={{ width: 80, height: 12 }} />
+                  </View>
+                  <SkeletonBox
+                    style={{ width: 60, height: 18, borderRadius: 8 }}
+                  />
+                </View>
+              </View>
+            ))}
+          </View>
+        </View>
+        <View className="px-5 py-4 mb-6">
+          <View className="flex-row items-center justify-between mb-4">
+            <View className="flex-row items-center">
+              <SkeletonBox
+                style={{
+                  width: 24,
+                  height: 24,
+                  borderRadius: 12,
+                  marginRight: 8,
+                }}
+              />
+              <SkeletonBox style={{ width: 120, height: 20 }} />
+            </View>
+            <SkeletonBox style={{ width: 60, height: 18 }} />
+          </View>
+          {[1, 2, 3].map((_, idx) => (
+            <SkeletonBox
+              key={idx}
+              style={{
+                width: "100%",
+                height: 70,
+                borderRadius: 16,
+                marginBottom: 12,
+              }}
+            />
+          ))}
+        </View>
+      </ScrollView>
+    </SafeAreaView>
+  );
+}
+
 export default function HomeScreen() {
   const { user: userDetails } = useUser();
   const [refreshing, setRefreshing] = useState(false);
@@ -64,7 +245,6 @@ export default function HomeScreen() {
       });
       setIsLoading(false);
     } catch (error) {
-      console.error("Error fetching dashboard data:", error);
       setIsLoading(false);
     }
   };
@@ -122,12 +302,7 @@ export default function HomeScreen() {
   };
 
   if (isLoading || isLoadingWasteTypes || isLoadingCompletedDropoffs) {
-    return (
-      <SafeAreaView className="flex-1 bg-white items-center justify-center">
-        <ActivityIndicator size="large" color="#00FF00" />
-        <Text className="font-montserrat mt-4">Loading dashboard...</Text>
-      </SafeAreaView>
-    );
+    return <DashboardSkeleton />;
   }
 
   const totalRecycledWeight = completedDropoffs?.data
@@ -190,7 +365,6 @@ export default function HomeScreen() {
             </View>
           </View>
         </LinearGradient>
-
         <View className="px-4 -mt-6">
           <View
             className="bg-white rounded-2xl p-5 flex-row justify-between"
@@ -213,7 +387,6 @@ export default function HomeScreen() {
                 Balance
               </Text>
             </View>
-
             <View className="items-center flex-1 px-2 py-1 border-l border-r border-gray-100">
               <View className="h-14 w-14 rounded-full bg-green-50 items-center justify-center mb-2 border border-green-100">
                 <Ionicons name="star-outline" size={24} color="#00CC00" />
@@ -225,7 +398,6 @@ export default function HomeScreen() {
                 Points
               </Text>
             </View>
-
             <View className="items-center flex-1 px-2 py-1">
               <View className="h-14 w-14 rounded-full bg-green-50 items-center justify-center mb-2 border border-green-100">
                 <Ionicons name="cube-outline" size={24} color="#00CC00" />
@@ -239,7 +411,6 @@ export default function HomeScreen() {
             </View>
           </View>
         </View>
-
         <View className="px-5 py-6">
           <View className="flex-row items-center mb-4">
             <View className="w-6 h-6 rounded-full bg-[#00CC00]/10 items-center justify-center mr-2">
@@ -249,7 +420,6 @@ export default function HomeScreen() {
               Quick Actions
             </Text>
           </View>
-
           <View className="flex-row justify-between">
             <TouchableOpacity
               className="rounded-2xl overflow-hidden w-[48%]"
@@ -277,7 +447,6 @@ export default function HomeScreen() {
                 </Text>
               </LinearGradient>
             </TouchableOpacity>
-
             <TouchableOpacity
               className="rounded-2xl overflow-hidden w-[48%]"
               activeOpacity={0.9}
@@ -306,7 +475,6 @@ export default function HomeScreen() {
             </TouchableOpacity>
           </View>
         </View>
-
         <View className="px-5 py-2">
           <View className="flex-row items-center justify-between mb-4">
             <View className="flex-row items-center">
@@ -323,7 +491,6 @@ export default function HomeScreen() {
               </Text>
             </TouchableOpacity>
           </View>
-
           <View
             className="bg-white rounded-2xl overflow-hidden mb-5"
             style={{
@@ -392,7 +559,6 @@ export default function HomeScreen() {
                     </View>
                   )
                 )}
-
                 <TouchableOpacity
                   className="p-4 bg-gray-50 border-t border-gray-100 items-center"
                   onPress={navigateToHistory}
@@ -424,7 +590,6 @@ export default function HomeScreen() {
             )}
           </View>
         </View>
-
         <View className="px-5 py-4 mb-6">
           <View className="flex-row items-center justify-between mb-4">
             <View className="flex-row items-center">
@@ -445,7 +610,6 @@ export default function HomeScreen() {
               </Text>
             </TouchableOpacity>
           </View>
-
           {wasteTypes?.data.map((wasteType) => (
             <TouchableOpacity
               key={wasteType.id}
@@ -480,7 +644,6 @@ export default function HomeScreen() {
                   />
                 </View>
               )}
-
               <View className="flex-1">
                 <Text className="font-montserrat-bold text-gray-800 text-base">
                   {wasteType.name}
@@ -502,7 +665,6 @@ export default function HomeScreen() {
                   {wasteType.description}
                 </Text>
               </View>
-
               <View className="bg-green-50 h-8 w-8 rounded-full items-center justify-center">
                 <Ionicons name="chevron-forward" size={18} color="#00CC00" />
               </View>
@@ -510,13 +672,11 @@ export default function HomeScreen() {
           ))}
         </View>
       </ScrollView>
-
       <DropoffModal
         visible={dropoffModalVisible}
         onClose={closeDropoffModal}
         wasteType={null}
       />
-
       <WithdrawalModal
         visible={withdrawalModalVisible}
         onClose={closeWithdrawalModal}
