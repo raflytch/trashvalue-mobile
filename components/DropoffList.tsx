@@ -12,13 +12,18 @@ import {
   SafeAreaView,
   ScrollView,
 } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
+import {
+  Ionicons,
+  MaterialCommunityIcons,
+  FontAwesome5,
+} from "@expo/vector-icons";
 import { useDropoffs } from "@/hooks/useDropoffs";
 import { format } from "date-fns";
 import { id } from "date-fns/locale";
 import { LinearGradient } from "expo-linear-gradient";
 import AddWasteItemModal from "./AddWasteItemModal";
 import { Dropoff } from "@/types/dropoff.types";
+import Animated, { FadeIn, FadeOut } from "react-native-reanimated";
 
 const { width, height } = Dimensions.get("window");
 const guidelineBaseWidth = 375;
@@ -27,6 +32,180 @@ const scale = (size: number) => (width / guidelineBaseWidth) * size;
 const verticalScale = (size: number) => (height / guidelineBaseHeight) * size;
 const moderateScale = (size: number, factor = 0.5) =>
   size + (scale(size) - size) * factor;
+
+function DropoffListSkeleton() {
+  return (
+    <View style={{ marginBottom: 16 }}>
+      {[...Array(2)].map((_, idx) => (
+        <Animated.View
+          key={idx}
+          entering={FadeIn}
+          exiting={FadeOut}
+          style={{
+            backgroundColor: "white",
+            borderRadius: 16,
+            padding: 16,
+            marginBottom: 16,
+            shadowColor: "#000",
+            shadowOffset: { width: 0, height: 1 },
+            shadowOpacity: 0.05,
+            shadowRadius: 3,
+            elevation: 2,
+            borderWidth: 1,
+            borderColor: "#F0F0F0",
+            width: width - 32,
+            alignSelf: "center",
+          }}
+        >
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "center",
+              marginBottom: 12,
+            }}
+          >
+            <View
+              style={{
+                width: 80,
+                height: 20,
+                backgroundColor: "#E5E7EB",
+                borderRadius: 8,
+              }}
+            />
+            <View
+              style={{
+                width: 100,
+                height: 16,
+                backgroundColor: "#E5E7EB",
+                borderRadius: 8,
+              }}
+            />
+          </View>
+          <View
+            style={{
+              height: 12,
+              backgroundColor: "#E5E7EB",
+              borderRadius: 8,
+              marginBottom: 12,
+              width: "60%",
+            }}
+          />
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              marginBottom: 12,
+            }}
+          >
+            <View
+              style={{
+                width: 28,
+                height: 28,
+                backgroundColor: "#E5E7EB",
+                borderRadius: 8,
+                marginRight: 12,
+              }}
+            />
+            <View
+              style={{
+                flex: 1,
+                height: 14,
+                backgroundColor: "#E5E7EB",
+                borderRadius: 8,
+              }}
+            />
+          </View>
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              marginBottom: 12,
+            }}
+          >
+            <View
+              style={{
+                width: 28,
+                height: 28,
+                backgroundColor: "#E5E7EB",
+                borderRadius: 8,
+                marginRight: 12,
+              }}
+            />
+            <View
+              style={{
+                flex: 1,
+                height: 14,
+                backgroundColor: "#E5E7EB",
+                borderRadius: 8,
+              }}
+            />
+          </View>
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              marginBottom: 12,
+            }}
+          >
+            <View
+              style={{
+                width: 28,
+                height: 28,
+                backgroundColor: "#E5E7EB",
+                borderRadius: 8,
+                marginRight: 12,
+              }}
+            />
+            <View
+              style={{
+                flex: 1,
+                height: 14,
+                backgroundColor: "#E5E7EB",
+                borderRadius: 8,
+              }}
+            />
+          </View>
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              marginBottom: 12,
+            }}
+          >
+            <View
+              style={{
+                width: 28,
+                height: 28,
+                backgroundColor: "#E5E7EB",
+                borderRadius: 8,
+                marginRight: 12,
+              }}
+            />
+            <View
+              style={{
+                flex: 1,
+                height: 14,
+                backgroundColor: "#E5E7EB",
+                borderRadius: 8,
+              }}
+            />
+          </View>
+          <View style={{ alignItems: "flex-end" }}>
+            <View
+              style={{
+                width: 120,
+                height: 32,
+                backgroundColor: "#E5E7EB",
+                borderRadius: 8,
+              }}
+            />
+          </View>
+        </Animated.View>
+      ))}
+    </View>
+  );
+}
 
 interface DropoffListProps {
   hideHeader?: boolean;
@@ -191,12 +370,7 @@ export default function DropoffList({
   );
 
   if (isLoading) {
-    return (
-      <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#00AA00" />
-        <Text style={styles.loadingText}>Memuat daftar dropoff...</Text>
-      </View>
-    );
+    return <DropoffListSkeleton />;
   }
 
   if (isError) {

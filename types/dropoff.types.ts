@@ -51,7 +51,7 @@ export interface DropoffResponse {
 export interface CreateDropoffPayload {
   pickupAddress: string;
   pickupDate: string;
-  pickupMethod: "PICKUP" | "SELF_DROPOFF";
+  pickupMethod: "PICKUP" | "DROPOFF";
   notes?: string;
 }
 

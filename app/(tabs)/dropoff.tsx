@@ -5,7 +5,6 @@ import {
   SafeAreaView,
   ScrollView,
   TouchableOpacity,
-  ActivityIndicator,
   RefreshControl,
   StatusBar,
   Dimensions,
@@ -16,155 +15,189 @@ import {
   FontAwesome5,
 } from "@expo/vector-icons";
 import { useWasteTypes } from "@/hooks/useWasteTypes";
-import WasteTypeCard from "@/components/WasteTypeCard";
+import WasteTypeCard, {
+  WasteTypeCardSkeleton,
+} from "@/components/WasteTypeCard";
 import WasteTypeDetailModal from "@/components/WasteTypeDetailModal";
 import DropoffModal from "@/components/DropoffModal";
 import DropoffList from "@/components/DropoffList";
 import DropoffSelectionModal from "@/components/DropoffSelectionModal";
 import { WasteType } from "@/types/waste.types";
 import { LinearGradient } from "expo-linear-gradient";
+import Animated, { FadeIn, FadeOut } from "react-native-reanimated";
 
 const { width } = Dimensions.get("window");
 
-function WasteTypeSkeleton() {
+function DropoffListSkeleton() {
   return (
-    <View
-      style={{
-        backgroundColor: "white",
-        borderRadius: 18,
-        marginBottom: 20,
-        overflow: "hidden",
-        borderWidth: 1,
-        borderColor: "#f0f0f0",
-        shadowColor: "#000",
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.08,
-        shadowRadius: 8,
-        elevation: 3,
-        width: "100%",
-      }}
-    >
-      <View
-        style={{
-          width: "100%",
-          height: 160,
-          backgroundColor: "#E5E7EB",
-          position: "relative",
-          overflow: "hidden",
-        }}
-      >
-        <LinearGradient
-          colors={["#f3f4f6", "#e5e7eb", "#f3f4f6"]}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 0 }}
+    <View style={{ marginBottom: 16 }}>
+      {[...Array(2)].map((_, idx) => (
+        <Animated.View
+          key={idx}
+          entering={FadeIn}
+          exiting={FadeOut}
           style={{
-            position: "absolute",
-            left: 0,
-            top: 0,
-            width: "100%",
-            height: "100%",
-            opacity: 0.7,
-          }}
-        />
-        <MaterialCommunityIcons
-          name="recycle"
-          size={64}
-          color="#D1D5DB"
-          style={{
-            position: "absolute",
-            right: 16,
-            bottom: 16,
-            opacity: 0.25,
-          }}
-        />
-        <View
-          style={{
-            position: "absolute",
-            left: 16,
-            top: 16,
-            width: 48,
-            height: 48,
-            borderRadius: 24,
-            backgroundColor: "#F1F5F9",
-            justifyContent: "center",
-            alignItems: "center",
-            opacity: 0.5,
-          }}
-        >
-          <FontAwesome5 name="leaf" size={28} color="#D1D5DB" />
-        </View>
-      </View>
-      <View style={{ padding: 16 }}>
-        <View
-          style={{
-            width: 140,
-            height: 20,
-            backgroundColor: "#E5E7EB",
-            borderRadius: 8,
-            marginBottom: 14,
-          }}
-        />
-        <View
-          style={{
-            width: 90,
-            height: 14,
-            backgroundColor: "#E5E7EB",
-            borderRadius: 8,
-            marginBottom: 10,
-          }}
-        />
-        <View
-          style={{
-            width: "100%",
-            height: 12,
-            backgroundColor: "#E5E7EB",
-            borderRadius: 8,
-            marginBottom: 8,
-          }}
-        />
-        <View
-          style={{
-            width: "85%",
-            height: 12,
-            backgroundColor: "#E5E7EB",
-            borderRadius: 8,
-            marginBottom: 8,
-          }}
-        />
-        <View
-          style={{
-            width: "60%",
-            height: 12,
-            backgroundColor: "#E5E7EB",
-            borderRadius: 8,
-          }}
-        />
-        <View
-          style={{
-            flexDirection: "row",
-            marginTop: 18,
-            alignItems: "center",
+            backgroundColor: "white",
+            borderRadius: 16,
+            padding: 16,
+            marginBottom: 16,
+            shadowColor: "#000",
+            shadowOffset: { width: 0, height: 1 },
+            shadowOpacity: 0.05,
+            shadowRadius: 3,
+            elevation: 2,
+            borderWidth: 1,
+            borderColor: "#F0F0F0",
+            width: width - 32,
+            alignSelf: "center",
           }}
         >
           <View
             style={{
-              width: 36,
-              height: 36,
-              borderRadius: 18,
-              backgroundColor: "#E5E7EB",
-              marginRight: 12,
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "center",
+              marginBottom: 12,
             }}
-          />
+          >
+            <View
+              style={{
+                width: 80,
+                height: 20,
+                backgroundColor: "#E5E7EB",
+                borderRadius: 8,
+              }}
+            />
+            <View
+              style={{
+                width: 100,
+                height: 16,
+                backgroundColor: "#E5E7EB",
+                borderRadius: 8,
+              }}
+            />
+          </View>
           <View
             style={{
-              width: 80,
-              height: 14,
+              height: 12,
               backgroundColor: "#E5E7EB",
               borderRadius: 8,
+              marginBottom: 12,
+              width: "60%",
             }}
           />
-        </View>
-      </View>
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              marginBottom: 12,
+            }}
+          >
+            <View
+              style={{
+                width: 28,
+                height: 28,
+                backgroundColor: "#E5E7EB",
+                borderRadius: 8,
+                marginRight: 12,
+              }}
+            />
+            <View
+              style={{
+                flex: 1,
+                height: 14,
+                backgroundColor: "#E5E7EB",
+                borderRadius: 8,
+              }}
+            />
+          </View>
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              marginBottom: 12,
+            }}
+          >
+            <View
+              style={{
+                width: 28,
+                height: 28,
+                backgroundColor: "#E5E7EB",
+                borderRadius: 8,
+                marginRight: 12,
+              }}
+            />
+            <View
+              style={{
+                flex: 1,
+                height: 14,
+                backgroundColor: "#E5E7EB",
+                borderRadius: 8,
+              }}
+            />
+          </View>
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              marginBottom: 12,
+            }}
+          >
+            <View
+              style={{
+                width: 28,
+                height: 28,
+                backgroundColor: "#E5E7EB",
+                borderRadius: 8,
+                marginRight: 12,
+              }}
+            />
+            <View
+              style={{
+                flex: 1,
+                height: 14,
+                backgroundColor: "#E5E7EB",
+                borderRadius: 8,
+              }}
+            />
+          </View>
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              marginBottom: 12,
+            }}
+          >
+            <View
+              style={{
+                width: 28,
+                height: 28,
+                backgroundColor: "#E5E7EB",
+                borderRadius: 8,
+                marginRight: 12,
+              }}
+            />
+            <View
+              style={{
+                flex: 1,
+                height: 14,
+                backgroundColor: "#E5E7EB",
+                borderRadius: 8,
+              }}
+            />
+          </View>
+          <View style={{ alignItems: "flex-end" }}>
+            <View
+              style={{
+                width: 120,
+                height: 32,
+                backgroundColor: "#E5E7EB",
+                borderRadius: 8,
+              }}
+            />
+          </View>
+        </Animated.View>
+      ))}
     </View>
   );
 }
@@ -276,7 +309,11 @@ export default function DropoffScreen() {
               Daftar Dropoff
             </Text>
           </View>
-          <DropoffList hideHeader onCreateDropoff={handleCreateDropoff} />
+          {isLoading ? (
+            <DropoffListSkeleton />
+          ) : (
+            <DropoffList hideHeader onCreateDropoff={handleCreateDropoff} />
+          )}
         </View>
 
         <View className="mb-4">
@@ -288,7 +325,7 @@ export default function DropoffScreen() {
         {isLoading ? (
           <View style={{ paddingBottom: 24 }}>
             {[...Array(3)].map((_, idx) => (
-              <WasteTypeSkeleton key={idx} />
+              <WasteTypeCardSkeleton key={idx} />
             ))}
           </View>
         ) : isError ? (
