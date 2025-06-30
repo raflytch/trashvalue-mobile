@@ -29,7 +29,7 @@ export default function Index() {
 
   if (isAuthenticated) {
     if (user?.role === "USER") {
-      return <Redirect href="/(tabs)/index" />;
+      return <Redirect href="/(tabs)" />;
     }
   }
 

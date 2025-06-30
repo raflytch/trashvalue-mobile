@@ -10,7 +10,7 @@ export default function AuthLayout() {
 
   if (isAuthenticated) {
     if (user?.role === "USER") {
-      return <Redirect href="/(user)" />;
+      return <Redirect href="/(tabs)" />;
     }
   }
 

@@ -50,7 +50,7 @@ export default function Login() {
   useEffect(() => {
     if (isAuthenticated && user) {
       if (user.role === "USER") {
-        router.replace("/(user)");
+        router.replace("/(tabs)");
       }
     }
   }, [isAuthenticated, user]);
