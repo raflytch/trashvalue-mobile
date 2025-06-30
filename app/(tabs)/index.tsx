@@ -20,6 +20,7 @@ import { router } from "expo-router";
 import DropoffModal from "@/components/DropoffModal";
 import WithdrawalModal from "@/components/WithdrawalModal";
 import { Dropoff } from "@/types/dropoff.types";
+import Animated, { FadeIn, FadeOut } from "react-native-reanimated";
 
 const { width } = Dimensions.get("window");
 
@@ -30,7 +31,9 @@ interface StatsData {
 
 function SkeletonBox({ style }: { style?: any }) {
   return (
-    <View
+    <Animated.View
+      entering={FadeIn}
+      exiting={FadeOut}
       style={[
         {
           backgroundColor: "#E5E7EB",
@@ -39,7 +42,6 @@ function SkeletonBox({ style }: { style?: any }) {
         },
         style,
       ]}
-      className="animate-pulse"
     />
   );
 }

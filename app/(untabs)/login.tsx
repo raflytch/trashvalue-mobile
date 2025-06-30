@@ -96,7 +96,7 @@ export default function Login() {
   };
 
   const navigateToSignup = () => {
-    router.push("/(auth)/signup");
+    router.push("/(untabs)/signup");
   };
 
   return (

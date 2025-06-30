@@ -14,7 +14,7 @@ export default function UserTabLayout() {
   const insets = useSafeAreaInsets();
 
   if (!isAuthenticated) {
-    return <Redirect href="/(auth)/login" />;
+    return <Redirect href="/(untabs)/login" />;
   }
 
   return (

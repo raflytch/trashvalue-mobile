@@ -550,7 +550,7 @@ export default function SignUp() {
               <Text className="text-gray-600 font-montserrat">
                 Already have an account?{" "}
               </Text>
-              <Link href="/(auth)/login" asChild>
+              <Link href="/(untabs)/login" asChild>
                 <TouchableOpacity>
                   <Text className="text-[#00CC00] font-montserrat-bold">
                     Login
