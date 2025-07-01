@@ -70,17 +70,20 @@ export default function AddWasteItemModal({
     });
 
     if (!result.canceled) {
-      const uri = result.assets[0].uri;
+      const asset = result.assets[0];
+      if (asset.fileSize && asset.fileSize > 3 * 1024 * 1024) {
+        Alert.alert("Ukuran gambar maksimal 3MB");
+        return;
+      }
+      const uri = asset.uri;
       const fileName = uri.split("/").pop();
       const match = /\.(\w+)$/.exec(fileName || "");
       const type = match ? `image/${match[1]}` : "image";
-
       const formData = {
         uri,
         name: fileName,
         type,
       };
-
       setImage(formData);
     }
   };
@@ -90,12 +93,10 @@ export default function AddWasteItemModal({
       Alert.alert("Error", "Pilih jenis sampah terlebih dahulu");
       return;
     }
-
     if (!weight || isNaN(parseFloat(weight)) || parseFloat(weight) <= 0) {
       Alert.alert("Error", "Masukkan berat sampah yang valid");
       return;
     }
-
     addWasteItem(
       {
         wasteTypeId: selectedWasteType.id,
@@ -163,7 +164,6 @@ export default function AddWasteItemModal({
               <Ionicons name="close" size={24} color="#4B5563" />
             </TouchableOpacity>
           </View>
-
           <ScrollView className="p-6">
             <View className="mb-6">
               <Text className="font-montserrat-medium text-gray-700 mb-2">
@@ -214,7 +214,6 @@ export default function AddWasteItemModal({
                 </TouchableOpacity>
               )}
             </View>
-
             <View className="mb-6">
               <Text className="font-montserrat-medium text-gray-700 mb-2">
                 Berat (kg)
@@ -245,7 +244,6 @@ export default function AddWasteItemModal({
                   </View>
                 )}
             </View>
-
             <View className="mb-6">
               <Text className="font-montserrat-medium text-gray-700 mb-2">
                 Catatan (Opsional)
@@ -259,10 +257,12 @@ export default function AddWasteItemModal({
                 textAlignVertical="top"
               />
             </View>
-
             <View className="mb-6">
               <Text className="font-montserrat-medium text-gray-700 mb-2">
                 Foto Sampah (Opsional)
+              </Text>
+              <Text className="text-gray-500 font-montserrat text-xs mb-2">
+                Maksimal ukuran gambar 3MB
               </Text>
               {image ? (
                 <View className="relative">
@@ -291,7 +291,6 @@ export default function AddWasteItemModal({
               )}
             </View>
           </ScrollView>
-
           <View className="p-6 border-t border-gray-200">
             <TouchableOpacity
               className="bg-green-600 py-4 rounded-xl flex-row justify-center items-center"
@@ -314,7 +313,6 @@ export default function AddWasteItemModal({
               )}
             </TouchableOpacity>
           </View>
-
           {!wasteType && (
             <Modal
               visible={wasteTypesVisible}
@@ -335,7 +333,6 @@ export default function AddWasteItemModal({
                       <Ionicons name="close" size={24} color="#4B5563" />
                     </TouchableOpacity>
                   </View>
-
                   <ScrollView className="p-6">
                     {wasteTypesLoading ? (
                       <View className="py-20 justify-center items-center">

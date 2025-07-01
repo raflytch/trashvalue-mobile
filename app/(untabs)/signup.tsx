@@ -10,6 +10,7 @@ import {
   ActivityIndicator,
   KeyboardAvoidingView,
   Platform,
+  Alert,
 } from "react-native";
 import { router, Link } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
@@ -45,14 +46,19 @@ export default function SignUp() {
       });
 
       if (!result.canceled) {
+        const asset = result.assets[0];
+        if (asset.fileSize && asset.fileSize > 3 * 1024 * 1024) {
+          Alert.alert("Maximum image size is 3MB");
+          return;
+        }
         if (type === "profile") {
-          setProfileImage(result.assets[0].uri);
+          setProfileImage(asset.uri);
         } else {
-          setBackgroundPhoto(result.assets[0].uri);
+          setBackgroundPhoto(asset.uri);
         }
       }
     } catch (error) {
-      console.error("Error picking image:", error);
+      Alert.alert("Error", "Failed to pick image");
     }
   };
 
@@ -114,7 +120,6 @@ export default function SignUp() {
   return (
     <View className="flex-1 bg-white">
       <StatusBar barStyle="dark-content" backgroundColor="#ffffff" />
-
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         className="flex-1"
@@ -143,7 +148,6 @@ export default function SignUp() {
               <View className="w-10" />
             </View>
           </LinearGradient>
-
           <View className="bg-white flex-1 px-6 pt-8 pb-10 -mt-6 rounded-t-[30px]">
             <View className="mb-8 items-center">
               <View className="relative">
@@ -190,8 +194,10 @@ export default function SignUp() {
               <Text className="text-gray-700 font-montserrat-medium text-sm mt-3">
                 Upload profile photo
               </Text>
+              <Text className="text-gray-500 font-montserrat text-xs mt-1">
+                Maximum image size is 3MB
+              </Text>
             </View>
-
             <View className="mb-5">
               <Text className="text-gray-700 mb-2 font-montserrat-semibold text-base pl-1">
                 Full Name
@@ -234,7 +240,6 @@ export default function SignUp() {
                 </Text>
               )}
             </View>
-
             <View className="mb-5">
               <Text className="text-gray-700 mb-2 font-montserrat-semibold text-base pl-1">
                 Phone Number
@@ -278,7 +283,6 @@ export default function SignUp() {
                 </Text>
               )}
             </View>
-
             <View className="mb-5">
               <Text className="text-gray-700 mb-2 font-montserrat-semibold text-base pl-1">
                 Email Address
@@ -323,7 +327,6 @@ export default function SignUp() {
                 </Text>
               )}
             </View>
-
             <View className="mb-5">
               <Text className="text-gray-700 mb-2 font-montserrat-semibold text-base pl-1">
                 Password
@@ -376,7 +379,6 @@ export default function SignUp() {
                 </Text>
               )}
             </View>
-
             <View className="mb-5">
               <Text className="text-gray-700 mb-2 font-montserrat-semibold text-base pl-1">
                 Confirm Password
@@ -434,7 +436,6 @@ export default function SignUp() {
                 </Text>
               )}
             </View>
-
             <View className="mb-8">
               <Text className="text-gray-700 mb-2 font-montserrat-semibold text-base pl-1">
                 Address
@@ -485,13 +486,15 @@ export default function SignUp() {
                 </Text>
               )}
             </View>
-
             <TouchableOpacity
               className="mb-7"
               onPress={() => pickImage("background")}
             >
-              <Text className="text-gray-700 mb-2 font-montserrat-semibold text-base pl-1">
+              <Text className="text-gray-700 mb-2 font-montserrat-semibold text-base">
                 Background Image (Optional)
+              </Text>
+              <Text className="text-gray-500 font-montserrat text-xs mb-2">
+                Maximum image size is 3MB
               </Text>
               <View
                 className="h-32 rounded-xl overflow-hidden"
@@ -517,7 +520,6 @@ export default function SignUp() {
                 )}
               </View>
             </TouchableOpacity>
-
             <TouchableOpacity
               className="mb-6"
               onPress={handleSignUp}
@@ -545,7 +547,6 @@ export default function SignUp() {
                 )}
               </LinearGradient>
             </TouchableOpacity>
-
             <View className="flex-row items-center justify-center">
               <Text className="text-gray-600 font-montserrat">
                 Already have an account?{" "}
@@ -561,7 +562,6 @@ export default function SignUp() {
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
-
       <SuccessModal
         visible={showSuccessModal}
         onClose={handleSuccessModalClose}

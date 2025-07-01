@@ -26,10 +26,11 @@
       "package": "com.trashvalue.app",
       "versionCode": 1,
       "permissions": [
-        "CAMERA",
-        "READ_EXTERNAL_STORAGE",
-        "WRITE_EXTERNAL_STORAGE",
-        "ACCESS_FINE_LOCATION"
+        "android.permission.CAMERA",
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.WRITE_EXTERNAL_STORAGE",
+        "android.permission.ACCESS_FINE_LOCATION",
+        "android.permission.RECORD_AUDIO"
       ]
     },
     "web": {
@@ -74,7 +75,7 @@
         "origin": false
       },
       "eas": {
-        "projectId": "7b74557a-8c87-4e69-907f-00be71e791f4"
+        "projectId": "06f53465-8dc3-4370-9eda-b01f8fafb2a7"
       }
     },
     "updates": {
@@ -83,6 +84,7 @@
     },
     "runtimeVersion": {
       "policy": "appVersion"
-    }
+    },
+    "owner": "raflyazizabdillah"
   }
 }
