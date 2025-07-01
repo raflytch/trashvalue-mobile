@@ -110,7 +110,8 @@ trash4cash/
 Buat file `.env` di root project untuk menyimpan variabel environment, misal:
 
 ```
-API_URL=https://api.trashvalue.com
+EXPO_PUBLIC_API_URL=https://trashvalue-api.vercel.app/api/v1
+EXPO_MIDTRANS_CLIENT_KEY=SB-Mid-client-BtWr-N86OkdW2Qfn
 GEMINI_API_KEY=your_gemini_api_key
 ```
 
