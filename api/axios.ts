@@ -54,6 +54,12 @@ api.interceptors.response.use(
       await SecureStore.deleteItemAsync("token");
       store.dispatch(logout());
     }
+    if (error.response && error.response.data && error.response.data.message) {
+      return Promise.reject({
+        ...error,
+        message: error.response.data.message,
+      });
+    }
     return Promise.reject(error);
   }
 );
