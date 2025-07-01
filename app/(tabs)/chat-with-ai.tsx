@@ -233,7 +233,7 @@ export default function ChatWithAI() {
       <StatusBar barStyle="light-content" backgroundColor="#00AA00" />
 
       <LinearGradient
-        colors={["#00DD00", "#00AA00"]}
+        colors={["#08A92B", "#088F27"]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
         style={styles.header}
