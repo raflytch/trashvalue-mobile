@@ -472,7 +472,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: "600" as const,
     color: "#00AA00",
-    fontFamily: "Montserrat-SemiBold",
+    fontFamily: "Montserrat-Bold",
   },
   onlineIndicator: {
     width: 6,

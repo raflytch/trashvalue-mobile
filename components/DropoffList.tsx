@@ -11,6 +11,7 @@ import {
   Platform,
   SafeAreaView,
   ScrollView,
+  Modal,
 } from "react-native";
 import {
   Ionicons,
@@ -223,6 +224,7 @@ export default function DropoffList({
     null
   );
   const [addWasteModalVisible, setAddWasteModalVisible] = useState(false);
+  const [dropdownVisible, setDropdownVisible] = useState(false);
 
   const handleStatusChange = useCallback(
     (newStatus: "PENDING" | "PROCESSING") => {
@@ -230,6 +232,7 @@ export default function DropoffList({
         setPage(1);
         setStatus(newStatus);
       }
+      setDropdownVisible(false);
     },
     [status]
   );
@@ -415,39 +418,99 @@ export default function DropoffList({
           </LinearGradient>
         )}
         <View style={styles.filterContainer}>
-          <View style={styles.filterTabs}>
+          <View>
             <TouchableOpacity
               style={[
                 styles.filterTab,
-                status === "PENDING" ? styles.activeFilterTab : {},
+                styles.activeFilterTab,
+                { flexDirection: "row", alignItems: "center" },
               ]}
-              onPress={() => handleStatusChange("PENDING")}
+              onPress={() => setDropdownVisible(!dropdownVisible)}
             >
               <Text
                 style={[
                   styles.filterTabText,
-                  status === "PENDING" ? styles.activeFilterTabText : {},
+                  styles.activeFilterTabText,
+                  { marginRight: 6 },
                 ]}
               >
-                Pending
+                {status === "PENDING" ? "Pending" : "Processing"}
               </Text>
+              <Ionicons
+                name={dropdownVisible ? "chevron-up" : "chevron-down"}
+                size={16}
+                color="#00AA00"
+              />
             </TouchableOpacity>
-            <TouchableOpacity
-              style={[
-                styles.filterTab,
-                status === "PROCESSING" ? styles.activeFilterTab : {},
-              ]}
-              onPress={() => handleStatusChange("PROCESSING")}
+            <Modal
+              visible={dropdownVisible}
+              transparent
+              animationType="fade"
+              onRequestClose={() => setDropdownVisible(false)}
             >
-              <Text
-                style={[
-                  styles.filterTabText,
-                  status === "PROCESSING" ? styles.activeFilterTabText : {},
-                ]}
+              <TouchableOpacity
+                style={{
+                  flex: 1,
+                  backgroundColor: "rgba(0,0,0,0.2)",
+                  justifyContent: "flex-start",
+                  alignItems: "flex-start",
+                }}
+                activeOpacity={1}
+                onPressOut={() => setDropdownVisible(false)}
               >
-                Processing
-              </Text>
-            </TouchableOpacity>
+                <View
+                  style={{
+                    backgroundColor: "white",
+                    borderRadius: 8,
+                    marginTop: 100,
+                    marginLeft: 16,
+                    shadowColor: "#000",
+                    shadowOffset: { width: 0, height: 2 },
+                    shadowOpacity: 0.1,
+                    shadowRadius: 6,
+                    elevation: 6,
+                    minWidth: 140,
+                  }}
+                >
+                  <TouchableOpacity
+                    style={{
+                      paddingVertical: 14,
+                      paddingHorizontal: 20,
+                      borderBottomWidth: 1,
+                      borderBottomColor: "#F0F0F0",
+                    }}
+                    onPress={() => handleStatusChange("PENDING")}
+                  >
+                    <Text
+                      style={{
+                        color: status === "PENDING" ? "#00AA00" : "#333",
+                        fontFamily: "Montserrat-SemiBold",
+                        fontSize: moderateScale(14),
+                      }}
+                    >
+                      Pending
+                    </Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={{
+                      paddingVertical: 14,
+                      paddingHorizontal: 20,
+                    }}
+                    onPress={() => handleStatusChange("PROCESSING")}
+                  >
+                    <Text
+                      style={{
+                        color: status === "PROCESSING" ? "#00AA00" : "#333",
+                        fontFamily: "Montserrat-SemiBold",
+                        fontSize: moderateScale(14),
+                      }}
+                    >
+                      Processing
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              </TouchableOpacity>
+            </Modal>
           </View>
           {onCreateDropoff && (
             <TouchableOpacity
@@ -653,6 +716,7 @@ const styles = StyleSheet.create({
     paddingVertical: verticalScale(8),
     paddingHorizontal: scale(16),
     borderRadius: moderateScale(8),
+    backgroundColor: "#F0F0F0",
   },
   activeFilterTab: {
     backgroundColor: "white",
