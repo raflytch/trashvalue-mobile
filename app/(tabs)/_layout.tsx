@@ -4,8 +4,9 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/features/store";
 import { Redirect } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
-import { View, Text, Pressable } from "react-native";
+import { View, Text, Pressable, Image } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { images } from "@/constants/images";
 
 export default function UserTabLayout() {
   const { isAuthenticated, user } = useSelector(
@@ -79,6 +80,7 @@ export default function UserTabLayout() {
           if (routeName === "index") label = "Home";
           else if (routeName === "dropoff") label = "Dropoff";
           else if (routeName === "history") label = "History";
+          else if (routeName === "chat-with-ai") label = "Chat AI";
           else if (routeName === "profile") label = "Profile";
 
           return (
@@ -137,6 +139,34 @@ export default function UserTabLayout() {
             >
               <Ionicons
                 name={focused ? "cube" : "cube-outline"}
+                size={22}
+                color={color}
+              />
+            </View>
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="chat-with-ai"
+        options={{
+          tabBarIcon: ({ color, size, focused }) => (
+            <View
+              style={{
+                padding: 8,
+                borderRadius: 12,
+                alignItems: "center",
+                justifyContent: "center",
+                width: 40,
+                height: 40,
+                marginBottom: 10,
+              }}
+            >
+              <Ionicons
+                name={
+                  focused
+                    ? "chatbubble-ellipses"
+                    : "chatbubble-ellipses-outline"
+                }
                 size={22}
                 color={color}
               />
