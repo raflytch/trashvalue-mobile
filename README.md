@@ -49,7 +49,7 @@ Aplikasi dapat dijalankan di:
 ## Struktur Direktori
 
 ```
-trash4cash/
+trashvalue/
 ├── app/                # File-based routing (halaman utama, login, signup, dsb)
 ├── components/         # Komponen UI (DropoffList, WasteTypeCard, Modal, dsb)
 ├── features/           # Redux store & slices
