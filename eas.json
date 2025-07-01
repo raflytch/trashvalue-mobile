@@ -8,7 +8,7 @@
       "developmentClient": true,
       "distribution": "internal",
       "env": {
-        "EXPO_PUBLIC_API_URL": "https://trash4cash-backend.vercel.app/api/v1",
+        "EXPO_PUBLIC_API_URL": "https://trashvalue-api.vercel.app/api/v1",
         "EXPO_MIDTRANS_CLIENT_KEY": "SB-Mid-client-BtWr-N86OkdW2Qfn"
       },
       "android": {
@@ -23,7 +23,7 @@
         "gradleCommand": ":app:assembleRelease"
       },
       "env": {
-        "EXPO_PUBLIC_API_URL": "https://trash4cash-backend.vercel.app/api/v1",
+        "EXPO_PUBLIC_API_URL": "https://trashvalue-api.vercel.app/api/v1",
         "EXPO_MIDTRANS_CLIENT_KEY": "SB-Mid-client-BtWr-N86OkdW2Qfn"
       }
     },
@@ -34,7 +34,7 @@
         "gradleCommand": ":app:bundleRelease"
       },
       "env": {
-        "EXPO_PUBLIC_API_URL": "https://trash4cash-backend.vercel.app/api/v1",
+        "EXPO_PUBLIC_API_URL": "https://trashvalue-api.vercel.app/api/v1",
         "EXPO_MIDTRANS_CLIENT_KEY": "SB-Mid-client-BtWr-N86OkdW2Qfn"
       }
     }
