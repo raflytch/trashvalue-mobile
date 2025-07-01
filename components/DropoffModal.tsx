@@ -47,7 +47,7 @@ export default function DropoffModal({
   const [pickupAddress, setPickupAddress] = useState("");
   const [selectedDateOption, setSelectedDateOption] = useState(0);
   const [selectedTimeOption, setSelectedTimeOption] = useState("09:00");
-  const [pickupMethod, setPickupMethod] = useState<"PICKUP" | "SELF_DROPOFF">(
+  const [pickupMethod, setPickupMethod] = useState<"PICKUP" | "DROPOFF">(
     "PICKUP"
   );
   const [notes, setNotes] = useState("");
@@ -202,22 +202,20 @@ export default function DropoffModal({
 
                     <TouchableOpacity
                       className={`flex-1 py-4 rounded-xl ${
-                        pickupMethod === "SELF_DROPOFF"
+                        pickupMethod === "DROPOFF"
                           ? "bg-green-500"
                           : "bg-gray-100"
                       } items-center justify-center`}
-                      onPress={() => setPickupMethod("SELF_DROPOFF")}
+                      onPress={() => setPickupMethod("DROPOFF")}
                     >
                       <Ionicons
                         name="walk-outline"
                         size={24}
-                        color={
-                          pickupMethod === "SELF_DROPOFF" ? "white" : "#666"
-                        }
+                        color={pickupMethod === "DROPOFF" ? "white" : "#666"}
                       />
                       <Text
                         className={`font-montserrat-medium mt-2 ${
-                          pickupMethod === "SELF_DROPOFF"
+                          pickupMethod === "DROPOFF"
                             ? "text-white"
                             : "text-gray-700"
                         }`}
