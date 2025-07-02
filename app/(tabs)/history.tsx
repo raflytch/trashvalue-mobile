@@ -424,7 +424,10 @@ export default function HistoryScreen() {
                 size={60}
                 color={getStatusFilterColor()}
               />
-              <Text style={styles.emptyFilterTitle}>
+              <Text
+                className="font-montserrat-bold text-lg text-center"
+                style={{ marginTop: 16, marginBottom: 16 }}
+              >
                 Tidak ada transaksi {getStatusFilterLabel().toLowerCase()}
               </Text>
               <TouchableOpacity
@@ -707,13 +710,13 @@ export default function HistoryScreen() {
           />
         </View>
         <View style={styles.headerContent}>
-          <View>
+          <View style={{ flex: 1 }}>
             <Text style={styles.headerTitle}>Riwayat</Text>
             <Text style={styles.headerSubtitle}>
               Lihat riwayat aktivitas daur ulang Anda
             </Text>
           </View>
-          <View style={styles.headerIconContainer}>
+          <View style={styles.headerIconContainerFixed}>
             <MaterialCommunityIcons name="history" size={36} color="white" />
           </View>
         </View>
@@ -783,6 +786,8 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     zIndex: 1,
+    width: "100%",
+    maxWidth: width - 20,
   },
   headerTitle: {
     fontFamily: "Montserrat-Bold",
@@ -799,7 +804,7 @@ const styles = StyleSheet.create({
     color: "white",
     opacity: 0.9,
   },
-  headerIconContainer: {
+  headerIconContainerFixed: {
     width: 60,
     height: 60,
     justifyContent: "center",
@@ -811,6 +816,8 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 4,
     elevation: 5,
+    marginLeft: 12,
+    alignSelf: "flex-end",
   },
   wavePattern: {
     position: "absolute",

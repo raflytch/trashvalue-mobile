@@ -220,9 +220,7 @@ export default function DropoffList({
   const [page, setPage] = useState(1);
   const [limit] = useState(10);
   const [status, setStatus] = useState<"PENDING" | "PROCESSING">("PENDING");
-  const [selectedDropoffId, setSelectedDropoffId] = useState<string | null>(
-    null
-  );
+  const [selectedDropoff, setSelectedDropoff] = useState<Dropoff | null>(null);
   const [addWasteModalVisible, setAddWasteModalVisible] = useState(false);
   const [dropdownVisible, setDropdownVisible] = useState(false);
 
@@ -255,8 +253,8 @@ export default function DropoffList({
     }
   };
 
-  const handleAddWaste = (dropoffId: string) => {
-    setSelectedDropoffId(dropoffId);
+  const handleAddWaste = (dropoff: Dropoff) => {
+    setSelectedDropoff(dropoff);
     setAddWasteModalVisible(true);
   };
 
@@ -359,7 +357,7 @@ export default function DropoffList({
       <View style={styles.footer}>
         <TouchableOpacity
           style={styles.actionButton}
-          onPress={() => handleAddWaste(item.id)}
+          onPress={() => handleAddWaste(item)}
         >
           <Text style={styles.actionButtonText}>Tambah Sampah</Text>
           <Ionicons
@@ -644,14 +642,15 @@ export default function DropoffList({
             )}
           </>
         )}
-        {selectedDropoffId && (
+        {selectedDropoff && (
           <AddWasteItemModal
             visible={addWasteModalVisible}
             onClose={() => {
               setAddWasteModalVisible(false);
-              setSelectedDropoffId(null);
+              setSelectedDropoff(null);
             }}
-            dropoffId={selectedDropoffId}
+            dropoffId={selectedDropoff.id}
+            pickupMethod={selectedDropoff.pickupMethod as "PICKUP" | "DROPOFF"}
           />
         )}
       </View>

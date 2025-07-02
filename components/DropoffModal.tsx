@@ -224,6 +224,13 @@ export default function DropoffModal({
                       </Text>
                     </TouchableOpacity>
                   </View>
+                  <View className="mt-3 bg-blue-50 p-3 rounded-xl border border-blue-200">
+                    <Text className="font-montserrat text-blue-600 text-sm">
+                      {pickupMethod === "PICKUP"
+                        ? "Jika Anda memilih dijemput, akan dikenakan biaya Rp 5.000 per kg sampah."
+                        : "Jika Anda memilih antar sendiri, tidak dikenakan biaya (gratis)."}
+                    </Text>
+                  </View>
                 </View>
 
                 <View className="mb-5">
