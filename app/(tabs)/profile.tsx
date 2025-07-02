@@ -50,6 +50,8 @@ export default function ProfileScreen() {
   const [isLogoutModalVisible, setIsLogoutModalVisible] = useState(false);
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isTopUpModalVisible, setIsTopUpModalVisible] = useState(false);
   const [isWithdrawalModalVisible, setIsWithdrawalModalVisible] =
     useState(false);
@@ -178,6 +180,8 @@ export default function ProfileScreen() {
   const resetPasswordFields = () => {
     setNewPassword("");
     setConfirmPassword("");
+    setShowNewPassword(false);
+    setShowConfirmPassword(false);
   };
 
   const handleLogout = () => {
@@ -359,7 +363,7 @@ export default function ProfileScreen() {
             style={{ elevation: 4 }}
           >
             <View className="flex-1 items-center">
-              <Text className="font-montserrat-bold text-2xl text-[#00CC00]">
+              <Text className="font-montserrat-bold text-lg text-[#00CC00]">
                 {userDetails?.points || 0}
               </Text>
               <Text className="font-montserrat-medium text-gray-500 text-xs mt-1">
@@ -370,7 +374,7 @@ export default function ProfileScreen() {
             <View className="h-full w-[1px] bg-gray-200" />
 
             <View className="flex-1 items-center">
-              <Text className="font-montserrat-bold text-2xl text-[#00CC00]">
+              <Text className="font-montserrat-bold text-lg text-[#00CC00]">
                 {formatRupiah(userDetails?.balance || 0)}
               </Text>
               <Text className="font-montserrat-medium text-gray-500 text-xs mt-1">
@@ -602,28 +606,54 @@ export default function ProfileScreen() {
               <Text className="font-montserrat-medium text-gray-600 mb-2">
                 New Password
               </Text>
-              <TextInput
-                className="bg-gray-100 p-4 rounded-xl font-montserrat text-gray-800"
-                value={newPassword}
-                onChangeText={setNewPassword}
-                placeholder="Enter new password"
-                secureTextEntry
-                placeholderTextColor="#aaaaaa"
-              />
+              <View className="flex-row items-center bg-gray-100 rounded-xl px-4">
+                <TextInput
+                  className="flex-1 font-montserrat text-gray-800 p-4"
+                  value={newPassword}
+                  onChangeText={setNewPassword}
+                  placeholder="Enter new password"
+                  secureTextEntry={!showNewPassword}
+                  placeholderTextColor="#aaaaaa"
+                />
+                <TouchableOpacity
+                  onPress={() => setShowNewPassword(!showNewPassword)}
+                  style={{ padding: 8 }}
+                >
+                  <Ionicons
+                    name={showNewPassword ? "eye-off-outline" : "eye-outline"}
+                    size={22}
+                    color="#888"
+                  />
+                </TouchableOpacity>
+              </View>
             </View>
 
             <View className="mb-7">
               <Text className="font-montserrat-medium text-gray-600 mb-2">
                 Confirm New Password
               </Text>
-              <TextInput
-                className="bg-gray-100 p-4 rounded-xl font-montserrat text-gray-800"
-                value={confirmPassword}
-                onChangeText={setConfirmPassword}
-                placeholder="Confirm new password"
-                secureTextEntry
-                placeholderTextColor="#aaaaaa"
-              />
+              <View className="flex-row items-center bg-gray-100 rounded-xl px-4">
+                <TextInput
+                  className="flex-1 font-montserrat text-gray-800 p-4"
+                  value={confirmPassword}
+                  onChangeText={setConfirmPassword}
+                  placeholder="Confirm new password"
+                  secureTextEntry={!showConfirmPassword}
+                  placeholderTextColor="#aaaaaa"
+                />
+                <TouchableOpacity
+                  onPress={() => setShowConfirmPassword(!showConfirmPassword)}
+                  style={{ padding: 8 }}
+                >
+                  <Ionicons
+                    name={
+                      showConfirmPassword ? "eye-off-outline" : "eye-outline"
+                    }
+                    size={22}
+                    color="#888"
+                  />
+                </TouchableOpacity>
+              </View>
             </View>
 
             <TouchableOpacity
