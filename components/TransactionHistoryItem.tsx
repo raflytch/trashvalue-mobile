@@ -100,17 +100,21 @@ export default function TransactionHistoryItem({
             </Text>
           </View>
         </View>
-        <Text
-          style={[
-            styles.amount,
-            {
-              color: item.type === "DEPOSIT" ? "#00AA00" : "#EF4444",
-            },
-          ]}
-        >
-          {item.type === "DEPOSIT" ? "+" : "-"}
-          {formatCurrency(item.amount)}
-        </Text>
+        <View style={styles.amountContainer}>
+          <Text
+            style={[
+              styles.amount,
+              {
+                color: item.type === "DEPOSIT" ? "#00AA00" : "#EF4444",
+              },
+            ]}
+            numberOfLines={1}
+            ellipsizeMode="tail"
+          >
+            {item.type === "DEPOSIT" ? "+" : "-"}
+            {formatCurrency(item.amount)}
+          </Text>
+        </View>
       </View>
 
       <View style={styles.content}>
@@ -201,9 +205,16 @@ const styles = StyleSheet.create({
     fontSize: 10,
     marginLeft: 4,
   },
+  amountContainer: {
+    maxWidth: 120,
+    alignItems: "flex-end",
+    flexShrink: 1,
+  },
   amount: {
     fontFamily: "Montserrat-Bold",
     fontSize: 16,
+    textAlign: "right",
+    flexShrink: 1,
   },
   content: {
     padding: 16,
