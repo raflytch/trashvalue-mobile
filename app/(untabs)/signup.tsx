@@ -48,7 +48,7 @@ export default function SignUp() {
       if (!result.canceled) {
         const asset = result.assets[0];
         if (asset.fileSize && asset.fileSize > 3 * 1024 * 1024) {
-          Alert.alert("Maximum image size is 3MB");
+          Alert.alert("Ukuran gambar maksimal 3MB");
           return;
         }
         if (type === "profile") {
@@ -58,26 +58,27 @@ export default function SignUp() {
         }
       }
     } catch (error) {
-      Alert.alert("Error", "Failed to pick image");
+      Alert.alert("Error", "Gagal memilih gambar");
     }
   };
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
 
-    if (!name.trim()) newErrors.name = "Name is required";
-    if (!phone.trim()) newErrors.phone = "Phone number is required";
-    if (!email.trim()) newErrors.email = "Email is required";
-    else if (!/\S+@\S+\.\S+/.test(email)) newErrors.email = "Email is invalid";
+    if (!name.trim()) newErrors.name = "Nama wajib diisi";
+    if (!phone.trim()) newErrors.phone = "Nomor telepon wajib diisi";
+    if (!email.trim()) newErrors.email = "Email wajib diisi";
+    else if (!/\S+@\S+\.\S+/.test(email))
+      newErrors.email = "Format email tidak valid";
 
-    if (!password) newErrors.password = "Password is required";
+    if (!password) newErrors.password = "Kata sandi wajib diisi";
     else if (password.length < 6)
-      newErrors.password = "Password must be at least 6 characters";
+      newErrors.password = "Kata sandi minimal 6 karakter";
 
     if (password !== confirmPassword)
-      newErrors.confirmPassword = "Passwords do not match";
+      newErrors.confirmPassword = "Konfirmasi kata sandi tidak cocok";
 
-    if (!address.trim()) newErrors.address = "Address is required";
+    if (!address.trim()) newErrors.address = "Alamat wajib diisi";
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -98,8 +99,7 @@ export default function SignUp() {
       });
       setShowSuccessModal(true);
     } catch (error: any) {
-      const errorMessage =
-        error.response?.data?.message || "Registration failed";
+      const errorMessage = error.response?.data?.message || "Registrasi gagal";
       alert(errorMessage);
     }
   };
@@ -143,7 +143,7 @@ export default function SignUp() {
                 <Ionicons name="arrow-back" size={20} color="white" />
               </TouchableOpacity>
               <Text className="text-3xl font-montserrat-bold text-white">
-                Create Account
+                Buat Akun
               </Text>
               <View className="w-10" />
             </View>
@@ -192,15 +192,15 @@ export default function SignUp() {
                 </TouchableOpacity>
               </View>
               <Text className="text-gray-700 font-montserrat-medium text-sm mt-3">
-                Upload profile photo
+                Unggah foto profil
               </Text>
               <Text className="text-gray-500 font-montserrat text-xs mt-1">
-                Maximum image size is 3MB
+                Ukuran gambar maksimal 3MB
               </Text>
             </View>
             <View className="mb-5">
               <Text className="text-gray-700 mb-2 font-montserrat-semibold text-base pl-1">
-                Full Name
+                Nama Lengkap
               </Text>
               <View
                 className={`flex-row items-center border rounded-2xl px-4 py-3 ${
@@ -228,7 +228,7 @@ export default function SignUp() {
                   className="flex-1 text-gray-800 font-montserrat"
                   value={name}
                   onChangeText={setName}
-                  placeholder="Enter your full name"
+                  placeholder="Masukkan nama lengkap"
                   placeholderTextColor="#9CA3AF"
                   onFocus={() => handleFocus("name")}
                   onBlur={handleBlur}
@@ -242,7 +242,7 @@ export default function SignUp() {
             </View>
             <View className="mb-5">
               <Text className="text-gray-700 mb-2 font-montserrat-semibold text-base pl-1">
-                Phone Number
+                Nomor Telepon
               </Text>
               <View
                 className={`flex-row items-center border rounded-2xl px-4 py-3 ${
@@ -270,7 +270,7 @@ export default function SignUp() {
                   className="flex-1 text-gray-800 font-montserrat"
                   value={phone}
                   onChangeText={setPhone}
-                  placeholder="Enter your phone number"
+                  placeholder="Masukkan nomor telepon"
                   keyboardType="phone-pad"
                   placeholderTextColor="#9CA3AF"
                   onFocus={() => handleFocus("phone")}
@@ -285,7 +285,7 @@ export default function SignUp() {
             </View>
             <View className="mb-5">
               <Text className="text-gray-700 mb-2 font-montserrat-semibold text-base pl-1">
-                Email Address
+                Email
               </Text>
               <View
                 className={`flex-row items-center border rounded-2xl px-4 py-3 ${
@@ -313,7 +313,7 @@ export default function SignUp() {
                   className="flex-1 text-gray-800 font-montserrat"
                   value={email}
                   onChangeText={setEmail}
-                  placeholder="Enter your email"
+                  placeholder="Masukkan email"
                   keyboardType="email-address"
                   autoCapitalize="none"
                   placeholderTextColor="#9CA3AF"
@@ -329,7 +329,7 @@ export default function SignUp() {
             </View>
             <View className="mb-5">
               <Text className="text-gray-700 mb-2 font-montserrat-semibold text-base pl-1">
-                Password
+                Kata Sandi
               </Text>
               <View
                 className={`flex-row items-center border rounded-2xl px-4 py-3 ${
@@ -357,7 +357,7 @@ export default function SignUp() {
                   className="flex-1 text-gray-800 font-montserrat"
                   value={password}
                   onChangeText={setPassword}
-                  placeholder="Enter your password"
+                  placeholder="Masukkan kata sandi"
                   secureTextEntry={!showPassword}
                   placeholderTextColor="#9CA3AF"
                   onFocus={() => handleFocus("password")}
@@ -381,7 +381,7 @@ export default function SignUp() {
             </View>
             <View className="mb-5">
               <Text className="text-gray-700 mb-2 font-montserrat-semibold text-base pl-1">
-                Confirm Password
+                Konfirmasi Kata Sandi
               </Text>
               <View
                 className={`flex-row items-center border rounded-2xl px-4 py-3 ${
@@ -412,7 +412,7 @@ export default function SignUp() {
                   className="flex-1 text-gray-800 font-montserrat"
                   value={confirmPassword}
                   onChangeText={setConfirmPassword}
-                  placeholder="Confirm your password"
+                  placeholder="Konfirmasi kata sandi"
                   secureTextEntry={!showConfirmPassword}
                   placeholderTextColor="#9CA3AF"
                   onFocus={() => handleFocus("confirmPassword")}
@@ -438,7 +438,7 @@ export default function SignUp() {
             </View>
             <View className="mb-8">
               <Text className="text-gray-700 mb-2 font-montserrat-semibold text-base pl-1">
-                Address
+                Alamat
               </Text>
               <View
                 className={`border rounded-2xl px-4 py-3 ${
@@ -464,14 +464,14 @@ export default function SignUp() {
                     style={{ marginRight: 10 }}
                   />
                   <Text className="text-gray-600 font-montserrat-medium">
-                    Your Address
+                    Alamat Anda
                   </Text>
                 </View>
                 <TextInput
                   className="text-gray-800 font-montserrat"
                   value={address}
                   onChangeText={setAddress}
-                  placeholder="Enter your complete address"
+                  placeholder="Masukkan alamat lengkap"
                   multiline
                   numberOfLines={3}
                   style={{ height: 80, textAlignVertical: "top" }}
@@ -491,10 +491,10 @@ export default function SignUp() {
               onPress={() => pickImage("background")}
             >
               <Text className="text-gray-700 mb-2 font-montserrat-semibold text-base">
-                Background Image (Optional)
+                Gambar Latar (Opsional)
               </Text>
               <Text className="text-gray-500 font-montserrat text-xs mb-2">
-                Maximum image size is 3MB
+                Ukuran gambar maksimal 3MB
               </Text>
               <View
                 className="h-32 rounded-xl overflow-hidden"
@@ -514,7 +514,7 @@ export default function SignUp() {
                   <View className="flex-1 items-center justify-center">
                     <Ionicons name="image-outline" size={40} color="#9CA3AF" />
                     <Text className="text-gray-500 font-montserrat-medium mt-2">
-                      Tap to upload image
+                      Ketuk untuk unggah gambar
                     </Text>
                   </View>
                 )}
@@ -542,19 +542,19 @@ export default function SignUp() {
                   <ActivityIndicator size="small" color="white" />
                 ) : (
                   <Text className="text-white text-center text-lg font-montserrat-bold">
-                    Create Account
+                    Daftar Akun
                   </Text>
                 )}
               </LinearGradient>
             </TouchableOpacity>
             <View className="flex-row items-center justify-center">
               <Text className="text-gray-600 font-montserrat">
-                Already have an account?{" "}
+                Sudah punya akun?{" "}
               </Text>
               <Link href="/(untabs)/login" asChild>
                 <TouchableOpacity>
                   <Text className="text-[#00CC00] font-montserrat-bold">
-                    Login
+                    Masuk
                   </Text>
                 </TouchableOpacity>
               </Link>
@@ -565,7 +565,7 @@ export default function SignUp() {
       <SuccessModal
         visible={showSuccessModal}
         onClose={handleSuccessModalClose}
-        message="Your account has been created successfully!"
+        message="Akun Anda berhasil dibuat!"
       />
     </View>
   );

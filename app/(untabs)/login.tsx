@@ -42,7 +42,7 @@ export default function Login() {
 
   useEffect(() => {
     if (error) {
-      Alert.alert("Login Failed", error);
+      Alert.alert("Login Gagal", error);
       dispatch(clearError());
     }
   }, [error, dispatch]);
@@ -58,10 +58,11 @@ export default function Login() {
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
 
-    if (!email.trim()) newErrors.email = "Email is required";
-    else if (!/\S+@\S+\.\S+/.test(email)) newErrors.email = "Email is invalid";
+    if (!email.trim()) newErrors.email = "Email wajib diisi";
+    else if (!/\S+@\S+\.\S+/.test(email))
+      newErrors.email = "Format email tidak valid";
 
-    if (!password) newErrors.password = "Password is required";
+    if (!password) newErrors.password = "Kata sandi wajib diisi";
 
     setErrors(newErrors);
     setTouchedFields({
@@ -81,7 +82,7 @@ export default function Login() {
         password,
       });
     } catch (error: any) {
-      const errorMessage = error.response?.data?.message || "Login failed";
+      const errorMessage = error.response?.data?.message || "Login gagal";
       Alert.alert("Error", errorMessage);
     }
   };
@@ -112,7 +113,7 @@ export default function Login() {
           showsVerticalScrollIndicator={false}
         >
           <LinearGradient
-            colors={["#00CC00", "#00CC00"]}
+            colors={["#088F27", "#088F27"]}
             className="pt-14 pb-20"
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 1 }}
@@ -127,7 +128,7 @@ export default function Login() {
                 TrashValue
               </Text>
               <Text className="text-white/80 font-montserrat-semibold text-lg mt-1">
-                Turn waste into wealth
+                Ubah sampah jadi cuan
               </Text>
             </View>
           </LinearGradient>
@@ -135,10 +136,10 @@ export default function Login() {
           <View className="flex-1 px-6 -mt-12">
             <View className="bg-white rounded-3xl p-6 shadow-lg">
               <Text className="font-montserrat-bold text-2xl text-gray-800 mb-1">
-                Welcome Back
+                Selamat Datang
               </Text>
               <Text className="font-montserrat text-gray-500 mb-6">
-                Sign in to your account
+                Masuk ke akun Anda
               </Text>
 
               <View className="mb-5">
@@ -169,7 +170,7 @@ export default function Login() {
                     className="flex-1 ml-3 font-montserrat text-gray-800"
                     value={email}
                     onChangeText={setEmail}
-                    placeholder="Enter your email"
+                    placeholder="Masukkan email Anda"
                     keyboardType="email-address"
                     autoCapitalize="none"
                     placeholderTextColor="#999"
@@ -186,7 +187,7 @@ export default function Login() {
 
               <View className="mb-6">
                 <Text className="font-montserrat-medium text-gray-600 mb-2 ml-1">
-                  Password
+                  Kata Sandi
                 </Text>
                 <View
                   className={`flex-row items-center rounded-xl px-4 py-3 ${
@@ -213,7 +214,7 @@ export default function Login() {
                     className="flex-1 ml-3 font-montserrat text-gray-800"
                     value={password}
                     onChangeText={setPassword}
-                    placeholder="Enter your password"
+                    placeholder="Masukkan kata sandi"
                     secureTextEntry={!showPassword}
                     placeholderTextColor="#999"
                     onFocus={() => handleFocus("password")}
@@ -267,7 +268,7 @@ export default function Login() {
                     ) : (
                       <View className="flex-row items-center">
                         <Text className="text-white font-montserrat-bold text-base mr-2">
-                          Sign In
+                          Masuk
                         </Text>
                       </View>
                     )}
@@ -277,14 +278,14 @@ export default function Login() {
 
               <View className="flex-row justify-center mt-8">
                 <Text className="text-gray-600 font-montserrat">
-                  Don't have an account?{" "}
+                  Belum punya akun?{" "}
                 </Text>
                 <TouchableOpacity
                   activeOpacity={0.7}
                   onPress={navigateToSignup}
                 >
                   <Text className="text-[#00CF00] font-montserrat-bold">
-                    Sign Up
+                    Daftar
                   </Text>
                 </TouchableOpacity>
               </View>
