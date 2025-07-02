@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import {
   View,
   Text,
@@ -212,6 +212,7 @@ export default function DropoffScreen() {
   const [dropoffModalVisible, setDropoffModalVisible] = useState(false);
   const [dropoffSelectionModalVisible, setDropoffSelectionModalVisible] =
     useState(false);
+  const [refreshing, setRefreshing] = useState(false);
 
   const { data, isLoading, isError, refetch, isRefetching } = useWasteTypes(
     page,
@@ -257,10 +258,15 @@ export default function DropoffScreen() {
     setDropoffModalVisible(true);
   };
 
+  const onRefresh = useCallback(async () => {
+    setRefreshing(true);
+    await refetch();
+    setRefreshing(false);
+  }, [refetch]);
+
   return (
     <SafeAreaView className="flex-1 bg-gray-50">
       <StatusBar barStyle="light-content" backgroundColor="#00CC00" />
-
       <LinearGradient
         colors={["#08A92B", "#088F27"]}
         start={{ x: 0, y: 0 }}
@@ -270,7 +276,6 @@ export default function DropoffScreen() {
         <View className="absolute top-0 right-0 opacity-20">
           <MaterialCommunityIcons name="recycle" size={120} color="white" />
         </View>
-
         <View className="flex-row items-center justify-between">
           <View>
             <Text className="font-montserrat-bold text-2xl text-white mb-1">
@@ -285,20 +290,18 @@ export default function DropoffScreen() {
           </View>
         </View>
       </LinearGradient>
-
       <View className="bg-white mx-4 rounded-2xl -mt-5 p-4 shadow-md border border-gray-100">
         <Text className="font-montserrat-semibold text-gray-800 text-center">
           Pilih jenis sampah untuk didaur ulang dan dapatkan uang
         </Text>
       </View>
-
       <ScrollView
         className="flex-1 px-4 pt-6"
         showsVerticalScrollIndicator={false}
         refreshControl={
           <RefreshControl
-            refreshing={isRefetching}
-            onRefresh={refetch}
+            refreshing={refreshing || isRefetching}
+            onRefresh={onRefresh}
             colors={["#00CC00"]}
           />
         }
@@ -315,13 +318,11 @@ export default function DropoffScreen() {
             <DropoffList hideHeader onCreateDropoff={handleCreateDropoff} />
           )}
         </View>
-
         <View className="mb-4">
           <Text className="font-montserrat-bold text-xl text-gray-800 mb-3">
             Pilih Jenis Sampah
           </Text>
         </View>
-
         {isLoading ? (
           <View style={{ paddingBottom: 24 }}>
             {[...Array(3)].map((_, idx) => (
@@ -365,7 +366,6 @@ export default function DropoffScreen() {
                 />
               ))}
             </View>
-
             {data && data.metadata.totalPages > 1 && (
               <View className="bg-white rounded-xl shadow-sm border border-gray-100 py-3 px-2 mb-8 mt-2">
                 <View className="flex-row justify-between items-center px-3">
@@ -381,13 +381,11 @@ export default function DropoffScreen() {
                       Sebelumnya
                     </Text>
                   </TouchableOpacity>
-
                   <View className="bg-green-50 px-4 py-2 rounded-lg border border-green-100">
                     <Text className="font-montserrat-bold text-green-700">
                       {data.metadata.currentPage} / {data.metadata.totalPages}
                     </Text>
                   </View>
-
                   <TouchableOpacity
                     className={`flex-row items-center bg-gray-50 py-2 px-3 rounded-lg ${
                       page === data.metadata.totalPages
@@ -412,20 +410,17 @@ export default function DropoffScreen() {
           </>
         )}
       </ScrollView>
-
       <WasteTypeDetailModal
         visible={wasteTypeModalVisible}
         wasteType={selectedWasteType}
         onClose={handleCloseWasteTypeModal}
         onContinue={handleContinue}
       />
-
       <DropoffSelectionModal
         visible={dropoffSelectionModalVisible}
         onClose={handleCloseDropoffSelectionModal}
         wasteType={selectedWasteType}
       />
-
       <DropoffModal
         visible={dropoffModalVisible}
         onClose={handleCloseDropoffModal}
