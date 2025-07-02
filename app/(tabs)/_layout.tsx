@@ -4,9 +4,9 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/features/store";
 import { Redirect } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
-import { View, Text, Pressable, Image } from "react-native";
+import { View, Text, Pressable } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { images } from "@/constants/images";
+import { LinearGradient } from "expo-linear-gradient";
 
 export default function UserTabLayout() {
   const { isAuthenticated, user } = useSelector(
@@ -24,32 +24,25 @@ export default function UserTabLayout() {
         headerShown: false,
         tabBarStyle: {
           backgroundColor: "white",
-          height: 80 + insets.bottom,
-          paddingBottom: insets.bottom,
-          paddingTop: 10,
-          borderTopWidth: 1,
-          borderTopColor: "#F0F0F0",
-          elevation: 12,
+          height: 90 + insets.bottom,
+          paddingBottom: insets.bottom + 5,
+          paddingTop: 15,
+          paddingHorizontal: 10,
+          borderTopWidth: 0,
+          elevation: 20,
           shadowColor: "#000",
-          shadowOffset: { width: 0, height: -2 },
-          shadowOpacity: 0.1,
-          shadowRadius: 6,
+          shadowOffset: { width: 0, height: -4 },
+          shadowOpacity: 0.15,
+          shadowRadius: 12,
+          borderTopLeftRadius: 0,
+          borderTopRightRadius: 0,
         },
         tabBarActiveTintColor: "#00CC00",
-        tabBarInactiveTintColor: "#AAAAAA",
+        tabBarInactiveTintColor: "#9CA3AF",
         tabBarLabelStyle: {
-          fontFamily: "Montserrat-Medium",
-          fontSize: 12,
-          marginTop: 4,
-        },
-        tabBarIconStyle: {
-          marginTop: 3,
-        },
-        tabBarItemStyle: {
-          padding: 5,
-          height: 60,
-          alignItems: "center",
-          justifyContent: "center",
+          fontFamily: "Montserrat-SemiBold",
+          fontSize: 11,
+          marginTop: 6,
         },
         tabBarShowLabel: true,
         tabBarButton: ({
@@ -67,8 +60,18 @@ export default function UserTabLayout() {
             accessibilityState={accessibilityState}
             accessibilityLabel={accessibilityLabel}
             testID={testID}
-            android_ripple={{ color: "transparent" }}
-            style={style}
+            android_ripple={{ color: "rgba(0, 204, 0, 0.1)", radius: 30 }}
+            style={[
+              style,
+              {
+                flex: 1,
+                alignItems: "center",
+                justifyContent: "center",
+                paddingVertical: 8,
+                borderRadius: 20,
+                marginHorizontal: 2,
+              },
+            ]}
           >
             {children}
           </Pressable>
@@ -78,18 +81,19 @@ export default function UserTabLayout() {
           let label = "";
 
           if (routeName === "index") label = "Home";
-          else if (routeName === "dropoff") label = "Dropoff";
+          else if (routeName === "dropoff") label = "Drop Off";
           else if (routeName === "history") label = "History";
-          else if (routeName === "chat-with-ai") label = "Chat AI";
+          else if (routeName === "chat-with-ai") label = "TrashValue";
           else if (routeName === "profile") label = "Profile";
 
           return (
             <Text
               style={{
-                color,
-                fontFamily: "Montserrat-Medium",
-                fontSize: 12,
-                fontWeight: focused ? "600" : "400",
+                color: focused ? "#00CC00" : "#9CA3AF",
+                fontFamily: focused ? "Montserrat-Bold" : "Montserrat-Medium",
+                fontSize: 11,
+                marginTop: 6,
+                textAlign: "center",
               }}
             >
               {label}
@@ -101,23 +105,36 @@ export default function UserTabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          tabBarIcon: ({ color, size, focused }) => (
+          tabBarIcon: ({ color, focused }) => (
             <View
               style={{
-                padding: 8,
-                borderRadius: 12,
                 alignItems: "center",
                 justifyContent: "center",
-                width: 40,
-                height: 40,
-                marginBottom: 10,
+                width: 45,
+                height: 45,
+                borderRadius: 15,
+                backgroundColor: focused
+                  ? "rgba(0, 204, 0, 0.1)"
+                  : "transparent",
+                marginBottom: 4,
               }}
             >
-              <Ionicons
-                name={focused ? "home" : "home-outline"}
-                size={22}
-                color={color}
-              />
+              {focused ? (
+                <LinearGradient
+                  colors={["#00CC00", "#00AA00"]}
+                  style={{
+                    width: 35,
+                    height: 35,
+                    borderRadius: 12,
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <Ionicons name="home" size={20} color="white" />
+                </LinearGradient>
+              ) : (
+                <Ionicons name="home-outline" size={24} color={color} />
+              )}
             </View>
           ),
         }}
@@ -125,23 +142,36 @@ export default function UserTabLayout() {
       <Tabs.Screen
         name="dropoff"
         options={{
-          tabBarIcon: ({ color, size, focused }) => (
+          tabBarIcon: ({ color, focused }) => (
             <View
               style={{
-                padding: 8,
-                borderRadius: 12,
                 alignItems: "center",
                 justifyContent: "center",
-                width: 40,
-                height: 40,
-                marginBottom: 10,
+                width: 45,
+                height: 45,
+                borderRadius: 15,
+                backgroundColor: focused
+                  ? "rgba(0, 204, 0, 0.1)"
+                  : "transparent",
+                marginBottom: 4,
               }}
             >
-              <Ionicons
-                name={focused ? "cube" : "cube-outline"}
-                size={22}
-                color={color}
-              />
+              {focused ? (
+                <LinearGradient
+                  colors={["#00CC00", "#00AA00"]}
+                  style={{
+                    width: 35,
+                    height: 35,
+                    borderRadius: 12,
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <Ionicons name="cube" size={20} color="white" />
+                </LinearGradient>
+              ) : (
+                <Ionicons name="cube-outline" size={24} color={color} />
+              )}
             </View>
           ),
         }}
@@ -149,27 +179,44 @@ export default function UserTabLayout() {
       <Tabs.Screen
         name="chat-with-ai"
         options={{
-          tabBarIcon: ({ color, size, focused }) => (
+          tabBarIcon: ({ color, focused }) => (
             <View
               style={{
-                padding: 8,
-                borderRadius: 12,
                 alignItems: "center",
                 justifyContent: "center",
-                width: 40,
-                height: 40,
-                marginBottom: 10,
+                width: 45,
+                height: 45,
+                borderRadius: 15,
+                backgroundColor: focused
+                  ? "rgba(0, 204, 0, 0.1)"
+                  : "transparent",
+                marginBottom: 4,
               }}
             >
-              <Ionicons
-                name={
-                  focused
-                    ? "chatbubble-ellipses"
-                    : "chatbubble-ellipses-outline"
-                }
-                size={22}
-                color={color}
-              />
+              {focused ? (
+                <LinearGradient
+                  colors={["#00CC00", "#00AA00"]}
+                  style={{
+                    width: 35,
+                    height: 35,
+                    borderRadius: 12,
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <Ionicons
+                    name="chatbubble-ellipses"
+                    size={20}
+                    color="white"
+                  />
+                </LinearGradient>
+              ) : (
+                <Ionicons
+                  name="chatbubble-ellipses-outline"
+                  size={24}
+                  color={color}
+                />
+              )}
             </View>
           ),
         }}
@@ -177,23 +224,36 @@ export default function UserTabLayout() {
       <Tabs.Screen
         name="history"
         options={{
-          tabBarIcon: ({ color, size, focused }) => (
+          tabBarIcon: ({ color, focused }) => (
             <View
               style={{
-                padding: 8,
-                borderRadius: 12,
                 alignItems: "center",
                 justifyContent: "center",
-                width: 40,
-                height: 40,
-                marginBottom: 10,
+                width: 45,
+                height: 45,
+                borderRadius: 15,
+                backgroundColor: focused
+                  ? "rgba(0, 204, 0, 0.1)"
+                  : "transparent",
+                marginBottom: 4,
               }}
             >
-              <Ionicons
-                name={focused ? "time" : "time-outline"}
-                size={22}
-                color={color}
-              />
+              {focused ? (
+                <LinearGradient
+                  colors={["#00CC00", "#00AA00"]}
+                  style={{
+                    width: 35,
+                    height: 35,
+                    borderRadius: 12,
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <Ionicons name="time" size={20} color="white" />
+                </LinearGradient>
+              ) : (
+                <Ionicons name="time-outline" size={24} color={color} />
+              )}
             </View>
           ),
         }}
@@ -201,23 +261,36 @@ export default function UserTabLayout() {
       <Tabs.Screen
         name="profile"
         options={{
-          tabBarIcon: ({ color, size, focused }) => (
+          tabBarIcon: ({ color, focused }) => (
             <View
               style={{
-                padding: 8,
-                borderRadius: 12,
                 alignItems: "center",
                 justifyContent: "center",
-                width: 40,
-                height: 40,
-                marginBottom: 10,
+                width: 45,
+                height: 45,
+                borderRadius: 15,
+                backgroundColor: focused
+                  ? "rgba(0, 204, 0, 0.1)"
+                  : "transparent",
+                marginBottom: 4,
               }}
             >
-              <Ionicons
-                name={focused ? "person" : "person-outline"}
-                size={22}
-                color={color}
-              />
+              {focused ? (
+                <LinearGradient
+                  colors={["#00CC00", "#00AA00"]}
+                  style={{
+                    width: 35,
+                    height: 35,
+                    borderRadius: 12,
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <Ionicons name="person" size={20} color="white" />
+                </LinearGradient>
+              ) : (
+                <Ionicons name="person-outline" size={24} color={color} />
+              )}
             </View>
           ),
         }}
