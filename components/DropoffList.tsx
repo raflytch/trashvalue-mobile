@@ -357,7 +357,13 @@ export default function DropoffList({
           </View>
           <View style={styles.infoContent}>
             <Text style={styles.infoLabel}>Alamat:</Text>
-            <Text style={styles.infoValue}>{item.pickupAddress}</Text>
+            <Text style={styles.infoValue}>
+              {item.pickupAddress && item.pickupAddress.trim() !== ""
+                ? item.pickupAddress
+                : item.pickupMethod === "DROPOFF"
+                ? "Tanpa alamat (antar sendiri)"
+                : "-"}
+            </Text>
           </View>
         </View>
         {item.notes && (

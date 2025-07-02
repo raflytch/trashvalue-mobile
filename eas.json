@@ -8,8 +8,9 @@
       "developmentClient": true,
       "distribution": "internal",
       "env": {
-        "EXPO_PUBLIC_API_URL": "https://trashvalue-api.vercel.app/api/v1",
-        "EXPO_MIDTRANS_CLIENT_KEY": "SB-Mid-client-BtWr-N86OkdW2Qfn"
+        "EXPO_PUBLIC_API_URL": "EXPO_PUBLIC_API_URL",
+        "EXPO_MIDTRANS_CLIENT_KEY": "EXPO_MIDTRANS_CLIENT_KEY",
+        "EXPO_GOOGLE_MAPS_API_KEY": "EXPO_GOOGLE_MAPS_API_KEY"
       },
       "android": {
         "buildType": "apk",
@@ -23,8 +24,9 @@
         "gradleCommand": ":app:assembleRelease"
       },
       "env": {
-        "EXPO_PUBLIC_API_URL": "https://trashvalue-api.vercel.app/api/v1",
-        "EXPO_MIDTRANS_CLIENT_KEY": "SB-Mid-client-BtWr-N86OkdW2Qfn"
+        "EXPO_PUBLIC_API_URL": "EXPO_PUBLIC_API_URL",
+        "EXPO_MIDTRANS_CLIENT_KEY": "EXPO_MIDTRANS_CLIENT_KEY",
+        "EXPO_GOOGLE_MAPS_API_KEY": "EXPO_GOOGLE_MAPS_API_KEY"
       }
     },
     "production": {
@@ -34,8 +36,9 @@
         "gradleCommand": ":app:bundleRelease"
       },
       "env": {
-        "EXPO_PUBLIC_API_URL": "https://trashvalue-api.vercel.app/api/v1",
-        "EXPO_MIDTRANS_CLIENT_KEY": "SB-Mid-client-BtWr-N86OkdW2Qfn"
+        "EXPO_PUBLIC_API_URL": "EXPO_PUBLIC_API_URL",
+        "EXPO_MIDTRANS_CLIENT_KEY": "EXPO_MIDTRANS_CLIENT_KEY",
+        "EXPO_GOOGLE_MAPS_API_KEY": "EXPO_GOOGLE_MAPS_API_KEY"
       }
     }
   },
