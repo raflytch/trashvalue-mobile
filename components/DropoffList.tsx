@@ -4,13 +4,11 @@ import {
   Text,
   FlatList,
   TouchableOpacity,
-  ActivityIndicator,
   RefreshControl,
   StyleSheet,
   Dimensions,
   Platform,
   SafeAreaView,
-  ScrollView,
   Modal,
 } from "react-native";
 import {
@@ -223,6 +221,8 @@ export default function DropoffList({
   const [selectedDropoff, setSelectedDropoff] = useState<Dropoff | null>(null);
   const [addWasteModalVisible, setAddWasteModalVisible] = useState(false);
   const [dropdownVisible, setDropdownVisible] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
+  const [manualRefreshing, setManualRefreshing] = useState(false);
 
   const handleStatusChange = useCallback(
     (newStatus: "PENDING" | "PROCESSING") => {
@@ -267,6 +267,28 @@ export default function DropoffList({
     const date = new Date(dateString);
     return format(date, "HH:mm", { locale: id });
   };
+
+  const onRefresh = useCallback(async () => {
+    setRefreshing(true);
+    try {
+      await refetch();
+    } catch (error) {
+      console.error("Refresh error:", error);
+    } finally {
+      setRefreshing(false);
+    }
+  }, [refetch]);
+
+  const handleManualRefresh = useCallback(async () => {
+    setManualRefreshing(true);
+    try {
+      await refetch();
+    } catch (error) {
+      console.error("Manual refresh error:", error);
+    } finally {
+      setManualRefreshing(false);
+    }
+  }, [refetch]);
 
   const renderDropoffItem = ({ item }: { item: Dropoff }) => (
     <View style={styles.itemContainer}>
@@ -510,19 +532,41 @@ export default function DropoffList({
               </TouchableOpacity>
             </Modal>
           </View>
-          {onCreateDropoff && (
+          <View style={styles.actionButtons}>
+            {onCreateDropoff && (
+              <TouchableOpacity
+                style={styles.createButton}
+                onPress={onCreateDropoff}
+              >
+                <Ionicons
+                  name="add-circle-outline"
+                  size={moderateScale(18)}
+                  color="white"
+                />
+                <Text style={styles.createButtonText}>Buat Dropoff</Text>
+              </TouchableOpacity>
+            )}
             <TouchableOpacity
-              style={styles.createButton}
-              onPress={onCreateDropoff}
+              style={[
+                styles.refreshButton,
+                manualRefreshing && styles.refreshButtonLoading,
+              ]}
+              onPress={handleManualRefresh}
+              disabled={manualRefreshing}
             >
               <Ionicons
-                name="add-circle-outline"
+                name="refresh"
                 size={moderateScale(18)}
-                color="white"
+                color="#00AA00"
+                style={
+                  manualRefreshing && { transform: [{ rotate: "360deg" }] }
+                }
               />
-              <Text style={styles.createButtonText}>Buat Dropoff</Text>
+              <Text style={styles.refreshButtonText}>
+                {manualRefreshing ? "Memperbarui..." : "Perbarui Data"}
+              </Text>
             </TouchableOpacity>
-          )}
+          </View>
         </View>
         {data && data.data.length === 0 ? (
           <View style={styles.emptyContainer}>
@@ -572,8 +616,8 @@ export default function DropoffList({
               ]}
               refreshControl={
                 <RefreshControl
-                  refreshing={isRefetching}
-                  onRefresh={refetch}
+                  refreshing={refreshing || isRefetching}
+                  onRefresh={onRefresh}
                   colors={["#00AA00"]}
                 />
               }
@@ -696,7 +740,7 @@ const styles = StyleSheet.create({
   filterContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: "center",
+    alignItems: "flex-start",
     marginBottom: verticalScale(16),
     marginTop: verticalScale(8),
     paddingHorizontal: scale(16),
@@ -704,6 +748,11 @@ const styles = StyleSheet.create({
     minWidth: width,
     maxWidth: width,
     alignSelf: "center",
+  },
+  actionButtons: {
+    flexDirection: "column",
+    alignItems: "flex-end",
+    gap: verticalScale(8),
   },
   filterTabs: {
     flexDirection: "row",
@@ -745,6 +794,30 @@ const styles = StyleSheet.create({
     fontFamily: "Montserrat-SemiBold",
     fontSize: moderateScale(14),
     color: "white",
+    marginLeft: scale(4),
+  },
+  refreshButton: {
+    backgroundColor: "white",
+    borderRadius: moderateScale(8),
+    paddingHorizontal: scale(16),
+    paddingVertical: verticalScale(8),
+    flexDirection: "row",
+    alignItems: "center",
+    borderWidth: 1,
+    borderColor: "#00AA00",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 3,
+    elevation: 2,
+  },
+  refreshButtonLoading: {
+    opacity: 0.7,
+  },
+  refreshButtonText: {
+    fontFamily: "Montserrat-SemiBold",
+    fontSize: moderateScale(14),
+    color: "#00AA00",
     marginLeft: scale(4),
   },
   loadingContainer: {
