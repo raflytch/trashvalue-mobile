@@ -12,16 +12,12 @@ import {
   KeyboardAvoidingView,
   Platform,
   ActivityIndicator,
-  Dimensions,
-  StyleSheet,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 import { LinearGradient } from "expo-linear-gradient";
 import { useChat } from "@/hooks/useChat";
 import Markdown from "react-native-markdown-display";
-
-const { width } = Dimensions.get("window");
 
 interface ChatMessage {
   id: string;
@@ -147,14 +143,14 @@ export default function ChatWithAI() {
   };
 
   const TypingIndicator = () => (
-    <View style={styles.typingContainer}>
-      <View style={styles.typingBubble}>
-        <View style={styles.aiAvatarSmall}>
+    <View className="mb-4 flex-row justify-start">
+      <View className="flex-row items-center bg-white rounded-[20px] rounded-bl-2 p-3 shadow-sm">
+        <View className="w-6 h-6 rounded-full bg-green-100 items-center justify-center mr-2">
           <Ionicons name="hardware-chip" size={16} color="#00AA00" />
         </View>
-        <View style={styles.typingDots}>
+        <View className="flex-row items-center">
           <ActivityIndicator size="small" color="#00AA00" />
-          <Text style={styles.typingText}>
+          <Text className="font-montserrat-medium text-gray-600 text-sm ml-2">
             TrashValue AI sedang mengetik...
           </Text>
         </View>
@@ -164,49 +160,75 @@ export default function ChatWithAI() {
 
   const MessageBubble = ({ message: msg }: { message: ChatMessage }) => (
     <View
-      style={[
-        styles.messageContainer,
-        msg.type === "user" ? styles.userMessage : styles.aiMessage,
-      ]}
+      className={`mb-4 flex-row ${
+        msg.type === "user" ? "justify-end" : "justify-start"
+      }`}
     >
       {msg.type === "ai" && (
-        <View style={styles.aiAvatar}>
+        <View className="w-9 h-9 rounded-full bg-green-100 items-center justify-center mr-2 mt-1">
           <Ionicons name="hardware-chip" size={20} color="#00AA00" />
         </View>
       )}
 
       <View
-        style={[
-          styles.messageBubble,
-          msg.type === "user" ? styles.userBubble : styles.aiBubble,
-        ]}
+        className={`max-w-[75%] rounded-[20px] p-4 ${
+          msg.type === "user"
+            ? "bg-green-600 rounded-br-2"
+            : "bg-white rounded-bl-2 shadow-sm"
+        }`}
       >
         {msg.type === "ai" && (
-          <View style={styles.aiHeader}>
-            <Text style={styles.aiLabel}>TrashValue AI</Text>
-            <View style={styles.onlineIndicator} />
+          <View className="flex-row items-center mb-2">
+            <Text className="font-montserrat-bold text-xs text-green-600">
+              TrashValue AI
+            </Text>
+            <View className="w-1.5 h-1.5 rounded-full bg-green-400 ml-1.5" />
           </View>
         )}
 
         {msg.imageUrl && (
-          <View style={styles.imageContainer}>
+          <View className="mb-3">
             <Image
               source={{ uri: msg.imageUrl }}
-              style={styles.messageImage}
+              className="w-full h-48 rounded-3"
               resizeMode="cover"
             />
           </View>
         )}
 
-        <View style={styles.messageContent}>
+        <View className="mb-2">
           {msg.type === "ai" ? (
-            <Markdown style={markdownStyles}>{msg.message}</Markdown>
+            <Markdown
+              style={{
+                body: {
+                  fontSize: 15,
+                  lineHeight: 22,
+                  color: "#1F2937",
+                  fontFamily: "Montserrat-Regular",
+                },
+                strong: {
+                  fontWeight: "600",
+                  color: "#00AA00",
+                  fontFamily: "Montserrat-SemiBold",
+                },
+                bullet_list: {
+                  marginVertical: 8,
+                },
+                list_item: {
+                  marginVertical: 2,
+                },
+                paragraph: {
+                  marginVertical: 4,
+                },
+              }}
+            >
+              {msg.message}
+            </Markdown>
           ) : (
             <Text
-              style={[
-                styles.messageText,
-                msg.type === "user" ? styles.userText : styles.aiText,
-              ]}
+              className={`font-montserrat text-base leading-6 ${
+                msg.type === "user" ? "text-white" : "text-gray-800"
+              }`}
             >
               {msg.message}
             </Text>
@@ -214,10 +236,9 @@ export default function ChatWithAI() {
         </View>
 
         <Text
-          style={[
-            styles.timestamp,
-            msg.type === "user" ? styles.userTimestamp : styles.aiTimestamp,
-          ]}
+          className={`font-montserrat-medium text-xs ${
+            msg.type === "user" ? "text-white/70 text-right" : "text-gray-500"
+          }`}
         >
           {msg.timestamp.toLocaleTimeString("id-ID", {
             hour: "2-digit",
@@ -229,31 +250,34 @@ export default function ChatWithAI() {
   );
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView className="flex-1 bg-gray-50">
       <StatusBar barStyle="light-content" backgroundColor="#00AA00" />
 
       <LinearGradient
         colors={["#08A92B", "#088F27"]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
-        style={styles.header}
+        className="pt-8 pb-4 px-5"
+        style={{ paddingTop: Platform.OS === "android" ? 32 : 12 }}
       >
-        <View style={styles.headerContent}>
-          <View style={styles.headerLeft}>
-            <View style={styles.headerAvatar}>
+        <View className="flex-row items-center justify-between w-full">
+          <View className="flex-row items-center flex-1">
+            <View className="w-12 h-12 rounded-full bg-white/20 items-center justify-center mr-3">
               <Ionicons name="hardware-chip" size={28} color="white" />
             </View>
-            <View style={styles.headerInfo}>
-              <Text style={styles.headerTitle}>TrashValue AI</Text>
-              <View style={styles.headerStatus}>
-                <View style={styles.statusDot} />
-                <Text style={styles.headerSubtitle}>
+            <View className="flex-1">
+              <Text className="font-montserrat-bold text-xl text-white">
+                TrashValue AI
+              </Text>
+              <View className="flex-row items-center mt-1">
+                <View className="w-2 h-2 rounded-full bg-green-400 mr-1.5" />
+                <Text className="font-montserrat-medium text-sm text-white/90">
                   Online • Asisten Cerdas
                 </Text>
               </View>
             </View>
           </View>
-          <TouchableOpacity style={styles.headerAction}>
+          <TouchableOpacity className="w-10 h-10 rounded-full bg-white/20 items-center justify-center ml-2">
             <Ionicons
               name="information-circle-outline"
               size={24}
@@ -264,15 +288,17 @@ export default function ChatWithAI() {
       </LinearGradient>
 
       <KeyboardAvoidingView
-        style={styles.flex1}
+        className="flex-1"
         behavior={Platform.OS === "ios" ? "padding" : undefined}
-        keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 0}
       >
-        <View style={styles.flex1}>
+        <View className="flex-1">
           <ScrollView
             ref={scrollViewRef}
-            style={styles.messagesContainer}
-            contentContainerStyle={styles.messagesContent}
+            className="flex-1"
+            contentContainerStyle={{
+              paddingHorizontal: 16,
+              paddingVertical: 20,
+            }}
             showsVerticalScrollIndicator={false}
             keyboardShouldPersistTaps="handled"
           >
@@ -283,31 +309,36 @@ export default function ChatWithAI() {
             {isAiTyping && <TypingIndicator />}
           </ScrollView>
 
-          <View style={styles.inputContainer}>
+          <View className="bg-white border-t border-gray-200">
             {selectedImage && (
-              <View style={styles.imagePreview}>
-                <Image
-                  source={{ uri: selectedImage.uri }}
-                  style={styles.previewImage}
-                  resizeMode="cover"
-                />
-                <TouchableOpacity
-                  style={styles.removeImageButton}
-                  onPress={removeImage}
-                >
-                  <Ionicons name="close" size={18} color="white" />
-                </TouchableOpacity>
+              <View className="p-4 pb-2">
+                <View className="relative">
+                  <Image
+                    source={{ uri: selectedImage.uri }}
+                    className="w-20 h-20 rounded-3"
+                    resizeMode="cover"
+                  />
+                  <TouchableOpacity
+                    className="absolute -top-2 -right-2 bg-red-500 rounded-full w-6 h-6 items-center justify-center"
+                    onPress={removeImage}
+                  >
+                    <Ionicons name="close" size={18} color="white" />
+                  </TouchableOpacity>
+                </View>
               </View>
             )}
 
-            <View style={styles.inputRow}>
-              <TouchableOpacity style={styles.attachButton} onPress={pickImage}>
+            <View className="flex-row items-center px-4 py-2">
+              <TouchableOpacity
+                className="w-11 h-11 rounded-full bg-gray-100 items-center justify-center mr-3"
+                onPress={pickImage}
+              >
                 <Ionicons name="camera" size={24} color="#00AA00" />
               </TouchableOpacity>
 
-              <View style={styles.textInputContainer}>
+              <View className="flex-1 bg-gray-50 border border-gray-200 rounded-full px-4 py-2 mr-3 max-h-28 justify-center">
                 <TextInput
-                  style={styles.textInput}
+                  className="font-montserrat text-base text-gray-800 py-2 m-0"
                   placeholder="Tanyakan kepada TrashValue AI..."
                   value={message}
                   onChangeText={setMessage}
@@ -315,17 +346,15 @@ export default function ChatWithAI() {
                   maxLength={500}
                   placeholderTextColor="#999"
                   textAlignVertical="center"
-                  underlineColorAndroid="transparent"
                 />
               </View>
 
               <TouchableOpacity
-                style={[
-                  styles.sendButton,
+                className={`w-11 h-11 rounded-full items-center justify-center ${
                   (message.trim() || selectedImage) && !chatMutation.isPending
-                    ? styles.sendButtonActive
-                    : styles.sendButtonInactive,
-                ]}
+                    ? "bg-green-600"
+                    : "bg-gray-300"
+                }`}
                 onPress={sendMessage}
                 disabled={
                   (!message.trim() && !selectedImage) || chatMutation.isPending
@@ -344,338 +373,3 @@ export default function ChatWithAI() {
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  flex1: {
-    flex: 1,
-  },
-  container: {
-    flex: 1,
-    backgroundColor: "#F8FFFE",
-  },
-  header: {
-    paddingTop: Platform.OS === "android" ? 32 : 12,
-    paddingBottom: 16,
-    paddingHorizontal: 20,
-  },
-  headerContent: {
-    flexDirection: "row" as const,
-    alignItems: "center" as const,
-    justifyContent: "space-between" as const,
-    width: "100%",
-  },
-  headerLeft: {
-    flexDirection: "row" as const,
-    alignItems: "center" as const,
-    flex: 1,
-  },
-  headerAvatar: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    backgroundColor: "rgba(255,255,255,0.2)",
-    alignItems: "center" as const,
-    justifyContent: "center" as const,
-    marginRight: 12,
-  },
-  headerInfo: {
-    flex: 1,
-    minWidth: 0,
-  },
-  headerTitle: {
-    fontSize: 20,
-    fontWeight: "bold" as const,
-    color: "white",
-    fontFamily: "Montserrat-Bold",
-  },
-  headerStatus: {
-    flexDirection: "row" as const,
-    alignItems: "center" as const,
-    marginTop: 2,
-  },
-  statusDot: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    backgroundColor: "#4ADE80",
-    marginRight: 6,
-  },
-  headerSubtitle: {
-    fontSize: 13,
-    color: "rgba(255,255,255,0.9)",
-    fontFamily: "Montserrat-Medium",
-  },
-  headerAction: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: "rgba(255,255,255,0.2)",
-    alignItems: "center" as const,
-    justifyContent: "center" as const,
-    marginLeft: 8,
-  },
-  chatContainer: {
-    flex: 1,
-  },
-  messagesContainer: {
-    flex: 1,
-  },
-  messagesContent: {
-    paddingHorizontal: 16,
-    paddingVertical: 20,
-    paddingBottom: 0,
-  },
-  messageContainer: {
-    marginBottom: 16,
-    flexDirection: "row" as const,
-  },
-  userMessage: {
-    justifyContent: "flex-end" as const,
-  },
-  aiMessage: {
-    justifyContent: "flex-start" as const,
-  },
-  aiAvatar: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    backgroundColor: "#E8F5E8",
-    alignItems: "center" as const,
-    justifyContent: "center" as const,
-    marginRight: 8,
-    marginTop: 4,
-  },
-  messageBubble: {
-    maxWidth: width * 0.75,
-    borderRadius: 20,
-    padding: 16,
-  },
-  userBubble: {
-    backgroundColor: "#00AA00",
-    borderBottomRightRadius: 8,
-  },
-  aiBubble: {
-    backgroundColor: "white",
-    borderBottomLeftRadius: 8,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 3,
-    elevation: 2,
-  },
-  aiHeader: {
-    flexDirection: "row" as const,
-    alignItems: "center" as const,
-    marginBottom: 8,
-  },
-  aiLabel: {
-    fontSize: 12,
-    fontWeight: "600" as const,
-    color: "#00AA00",
-    fontFamily: "Montserrat-Bold",
-  },
-  onlineIndicator: {
-    width: 6,
-    height: 6,
-    borderRadius: 3,
-    backgroundColor: "#4ADE80",
-    marginLeft: 6,
-  },
-  imageContainer: {
-    marginBottom: 12,
-  },
-  messageImage: {
-    width: "100%",
-    height: 200,
-    borderRadius: 12,
-  },
-  messageContent: {
-    marginBottom: 8,
-  },
-  messageText: {
-    fontSize: 15,
-    lineHeight: 22,
-    fontFamily: "Montserrat-Regular",
-  },
-  userText: {
-    color: "white",
-  },
-  aiText: {
-    color: "#1F2937",
-  },
-  timestamp: {
-    fontSize: 11,
-    fontFamily: "Montserrat-Medium",
-  },
-  userTimestamp: {
-    color: "rgba(255,255,255,0.7)",
-    textAlign: "right" as const,
-  },
-  aiTimestamp: {
-    color: "#9CA3AF",
-  },
-  typingContainer: {
-    marginBottom: 16,
-    flexDirection: "row" as const,
-    justifyContent: "flex-start" as const,
-  },
-  typingBubble: {
-    flexDirection: "row" as const,
-    alignItems: "center" as const,
-    backgroundColor: "white",
-    borderRadius: 20,
-    borderBottomLeftRadius: 8,
-    padding: 12,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 3,
-    elevation: 2,
-  },
-  aiAvatarSmall: {
-    width: 24,
-    height: 24,
-    borderRadius: 12,
-    backgroundColor: "#E8F5E8",
-    alignItems: "center" as const,
-    justifyContent: "center" as const,
-    marginRight: 8,
-  },
-  typingDots: {
-    flexDirection: "row" as const,
-    alignItems: "center" as const,
-  },
-  typingText: {
-    fontSize: 13,
-    color: "#6B7280",
-    fontFamily: "Montserrat-Medium",
-    marginLeft: 8,
-  },
-  inputContainer: {
-    backgroundColor: "white",
-    borderTopWidth: 1,
-    borderTopColor: "#E5E7EB",
-    paddingBottom: Platform.OS === "android" ? 8 : 0,
-  },
-  imagePreview: {
-    padding: 16,
-    paddingBottom: 8,
-  },
-  previewImage: {
-    width: 80,
-    height: 80,
-    borderRadius: 12,
-  },
-  removeImageButton: {
-    position: "absolute" as const,
-    top: 8,
-    right: 8,
-    backgroundColor: "#EF4444",
-    borderRadius: 12,
-    width: 24,
-    height: 24,
-    alignItems: "center" as const,
-    justifyContent: "center" as const,
-  },
-  inputRow: {
-    flexDirection: "row" as const,
-    alignItems: "flex-end" as const,
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-  },
-  attachButton: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
-    backgroundColor: "#F3F4F6",
-    alignItems: "center" as const,
-    justifyContent: "center" as const,
-    marginRight: 12,
-  },
-  textInputContainer: {
-    flex: 1,
-    backgroundColor: "#F9FAFB",
-    borderRadius: 22,
-    borderWidth: 1,
-    borderColor: "#E5E7EB",
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    marginRight: 12,
-    maxHeight: 120,
-    justifyContent: "center" as const,
-  },
-  textInput: {
-    fontSize: 16,
-    color: "#1F2937",
-    fontFamily: "Montserrat-Regular",
-    textAlignVertical: "center" as const,
-    padding: 0,
-    margin: 0,
-  },
-  sendButton: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
-    alignItems: "center" as const,
-    justifyContent: "center" as const,
-  },
-  sendButtonActive: {
-    backgroundColor: "#00AA00",
-  },
-  sendButtonInactive: {
-    backgroundColor: "#D1D5DB",
-  },
-});
-
-const markdownStyles = {
-  body: {
-    fontSize: 15,
-    lineHeight: 22,
-    color: "#1F2937",
-    fontFamily: "Montserrat-Regular",
-  },
-  strong: {
-    fontWeight: "600" as const,
-    color: "#00AA00",
-    fontFamily: "Montserrat-SemiBold",
-  },
-  bullet_list: {
-    marginVertical: 8,
-  },
-  list_item: {
-    marginVertical: 2,
-  },
-  paragraph: {
-    marginVertical: 4,
-  },
-  heading1: {
-    fontSize: 18,
-    fontWeight: "bold" as const,
-    color: "#00AA00",
-    marginVertical: 8,
-    fontFamily: "Montserrat-Bold",
-  },
-  heading2: {
-    fontSize: 16,
-    fontWeight: "600" as const,
-    color: "#00AA00",
-    marginVertical: 6,
-    fontFamily: "Montserrat-SemiBold",
-  },
-  code_inline: {
-    backgroundColor: "#F3F4F6",
-    paddingHorizontal: 4,
-    paddingVertical: 2,
-    borderRadius: 4,
-    fontSize: 14,
-    fontFamily: "monospace",
-  },
-  blockquote: {
-    backgroundColor: "#F0F9F0",
-    borderLeftWidth: 4,
-    borderLeftColor: "#00AA00",
-    paddingLeft: 12,
-    paddingVertical: 8,
-    marginVertical: 8,
-  },
-};
