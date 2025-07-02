@@ -22,6 +22,7 @@ interface AddWasteItemModalProps {
   onClose: () => void;
   dropoffId: string;
   wasteType?: WasteType | null;
+  pickupMethod?: "PICKUP" | "DROPOFF";
 }
 
 export default function AddWasteItemModal({
@@ -29,6 +30,7 @@ export default function AddWasteItemModal({
   onClose,
   dropoffId,
   wasteType,
+  pickupMethod = "PICKUP",
 }: AddWasteItemModalProps) {
   const [selectedWasteType, setSelectedWasteType] = useState<WasteType | null>(
     wasteType || null
@@ -138,6 +140,21 @@ export default function AddWasteItemModal({
     }).format(amount);
   };
 
+  const calculateReward = () => {
+    if (
+      !(wasteType || selectedWasteType) ||
+      !weight ||
+      isNaN(parseFloat(weight))
+    ) {
+      return 0;
+    }
+
+    const basePrice =
+      (wasteType || selectedWasteType)!.pricePerKg * parseFloat(weight);
+    const pickupFee = pickupMethod === "PICKUP" ? 5000 * parseFloat(weight) : 0;
+    return basePrice - pickupFee;
+  };
+
   useEffect(() => {
     if (!visible) {
       resetForm();
@@ -214,6 +231,19 @@ export default function AddWasteItemModal({
                 </TouchableOpacity>
               )}
             </View>
+
+            <View className="mb-6 bg-blue-50 p-4 rounded-xl border border-blue-200">
+              <View className="flex-row items-center mb-2">
+                <Ionicons name="information-circle" size={20} color="#3B82F6" />
+                <Text className="font-montserrat-semibold text-blue-700 ml-2">
+                  Informasi Biaya Pengambilan
+                </Text>
+              </View>
+              <Text className="font-montserrat text-blue-600 text-sm leading-5">
+                • Dijemput: Biaya Rp 5.000/kg{"\n"}• Antar Sendiri: Gratis
+              </Text>
+            </View>
+
             <View className="mb-6">
               <Text className="font-montserrat-medium text-gray-700 mb-2">
                 Berat (kg)
@@ -233,13 +263,24 @@ export default function AddWasteItemModal({
               {(wasteType || selectedWasteType) &&
                 weight &&
                 !isNaN(parseFloat(weight)) && (
-                  <View className="bg-green-50 mt-2 p-3 rounded-lg">
-                    <Text className="font-montserrat-medium text-green-700">
-                      Perkiraan Harga:{" "}
-                      {formatRupiah(
-                        (wasteType || selectedWasteType)!.pricePerKg *
-                          parseFloat(weight)
+                  <View className="bg-green-50 mt-2 p-3 rounded-lg border border-green-200">
+                    <View className="mb-2">
+                      <Text className="font-montserrat text-gray-600 text-sm">
+                        Harga dasar:{" "}
+                        {formatRupiah(
+                          (wasteType || selectedWasteType)!.pricePerKg *
+                            parseFloat(weight)
+                        )}
+                      </Text>
+                      {pickupMethod === "PICKUP" && (
+                        <Text className="font-montserrat text-red-600 text-sm">
+                          Biaya dijemput: -
+                          {formatRupiah(5000 * parseFloat(weight))}
+                        </Text>
                       )}
+                    </View>
+                    <Text className="font-montserrat-semibold text-green-700">
+                      Perkiraan Reward: {formatRupiah(calculateReward())}
                     </Text>
                   </View>
                 )}
