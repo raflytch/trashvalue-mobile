@@ -50,13 +50,13 @@ export default function WithdrawalModal({
 
     const numAmount = Number(amount.replace(/[^0-9]/g, ""));
     if (!amount || numAmount <= 0) {
-      newErrors.amount = "Please enter a valid amount";
+      newErrors.amount = "Masukkan jumlah yang valid";
     } else if (numAmount < 10000) {
-      newErrors.amount = "Minimum withdrawal amount is Rp10,000";
+      newErrors.amount = "Jumlah minimum penarikan adalah Rp10.000";
     }
 
     if (!description.trim()) {
-      newErrors.description = "Please enter a description";
+      newErrors.description = "Masukkan deskripsi";
     }
 
     setErrors(newErrors);
@@ -77,15 +77,15 @@ export default function WithdrawalModal({
 
       handleClose();
       Alert.alert(
-        "Success",
-        "Your withdrawal request has been submitted successfully",
+        "Berhasil",
+        "Permintaan penarikan Anda telah berhasil dikirim",
         [{ text: "OK" }]
       );
     } catch (error: any) {
       console.error("Withdrawal error:", error);
       Alert.alert(
-        "Withdrawal Failed",
-        error.response?.data?.message || "Failed to process withdrawal request",
+        "Penarikan Gagal",
+        error.response?.data?.message || "Gagal memproses permintaan penarikan",
         [{ text: "OK" }]
       );
     }
@@ -127,7 +127,7 @@ export default function WithdrawalModal({
           <View className="px-6 py-5 border-b border-gray-100">
             <View className="flex-row justify-between items-center">
               <Text className="font-montserrat-bold text-xl text-gray-800">
-                Redeem Points
+                Tarik Saldo
               </Text>
               <TouchableOpacity
                 className="w-8 h-8 rounded-full bg-gray-100 items-center justify-center"
@@ -141,7 +141,7 @@ export default function WithdrawalModal({
           <ScrollView className="max-h-[500px]">
             <View className="px-6 py-5">
               <Text className="font-montserrat-medium text-gray-600 mb-2">
-                Amount
+                Jumlah
               </Text>
               <View
                 className={`border-2 rounded-xl ${
@@ -194,7 +194,7 @@ export default function WithdrawalModal({
 
               <View className="mt-6 mb-4">
                 <Text className="font-montserrat-medium text-gray-600 mb-3">
-                  Payment Method
+                  Metode Pembayaran
                 </Text>
                 <View className="flex-row justify-between">
                   <TouchableOpacity
@@ -219,7 +219,7 @@ export default function WithdrawalModal({
                           : "text-gray-600"
                       }`}
                     >
-                      Bank Transfer
+                      Transfer Bank
                     </Text>
                   </TouchableOpacity>
 
@@ -267,7 +267,7 @@ export default function WithdrawalModal({
                           : "text-gray-600"
                       }`}
                     >
-                      Cash
+                      Tunai
                     </Text>
                   </TouchableOpacity>
                 </View>
@@ -275,7 +275,7 @@ export default function WithdrawalModal({
 
               <View className="mt-4">
                 <Text className="font-montserrat-medium text-gray-600 mb-2">
-                  Description
+                  Deskripsi
                 </Text>
                 <View
                   className={`border-2 rounded-xl ${
@@ -286,7 +286,7 @@ export default function WithdrawalModal({
                     className="p-4 font-montserrat text-gray-800 min-h-[100px]"
                     value={description}
                     onChangeText={setDescription}
-                    placeholder="Enter withdrawal details (e.g. bank account number, e-wallet ID)"
+                    placeholder="Masukkan detail penarikan (misal: nomor rekening bank, ID e-wallet)"
                     multiline
                     textAlignVertical="top"
                     placeholderTextColor="#aaaaaa"
@@ -311,7 +311,7 @@ export default function WithdrawalModal({
                 <ActivityIndicator size="small" color="white" />
               ) : (
                 <Text className="font-montserrat-bold text-white text-center">
-                  Submit Withdrawal Request
+                  Kirim Permintaan Penarikan
                 </Text>
               )}
             </TouchableOpacity>

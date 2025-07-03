@@ -80,11 +80,11 @@ export default function UserTabLayout() {
           const routeName = route.name;
           let label = "";
 
-          if (routeName === "index") label = "Home";
-          else if (routeName === "dropoff") label = "Drop Off";
-          else if (routeName === "history") label = "History";
-          else if (routeName === "chat-with-ai") label = "TrashValue";
-          else if (routeName === "profile") label = "Profile";
+          if (routeName === "index") label = "Beranda";
+          else if (routeName === "dropoff") label = "Dropoff";
+          else if (routeName === "history") label = "Riwayat";
+          else if (routeName === "chat-with-ai") label = "Chat AI";
+          else if (routeName === "profile") label = "Profil";
 
           return (
             <Text

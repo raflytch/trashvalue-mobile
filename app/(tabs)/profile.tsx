@@ -26,6 +26,85 @@ import WithdrawalModal from "@/components/WithdrawalModal";
 
 const { width } = Dimensions.get("window");
 
+const SkeletonBox = ({ width, height, style }: any) => (
+  <View
+    className="bg-gray-200 rounded-lg"
+    style={[
+      {
+        width,
+        height,
+        backgroundColor: "#E5E7EB",
+      },
+      style,
+    ]}
+  />
+);
+
+const SkeletonProfile = () => (
+  <SafeAreaView className="flex-1 bg-gray-50">
+    <StatusBar barStyle="light-content" />
+    <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
+      <SkeletonBox width="100%" height={224} style={{ borderRadius: 0 }} />
+
+      <View className="items-center -mt-16 px-5">
+        <SkeletonBox width={128} height={128} style={{ borderRadius: 64 }} />
+
+        <View className="items-center mt-3">
+          <SkeletonBox width={200} height={32} style={{ marginBottom: 8 }} />
+          <SkeletonBox width={150} height={20} />
+        </View>
+
+        <View
+          className="w-full bg-white rounded-2xl mt-6 p-5 shadow-lg"
+          style={{ elevation: 4 }}
+        >
+          <View className="flex-row">
+            <View className="flex-1 items-center">
+              <SkeletonBox width={60} height={24} style={{ marginBottom: 4 }} />
+              <SkeletonBox width={40} height={16} />
+            </View>
+            <View className="h-full w-[1px] bg-gray-200" />
+            <View className="flex-1 items-center">
+              <SkeletonBox width={80} height={24} style={{ marginBottom: 4 }} />
+              <SkeletonBox width={50} height={16} />
+            </View>
+          </View>
+        </View>
+
+        <View className="flex-row w-full mt-4 gap-3">
+          <SkeletonBox width="48%" height={48} style={{ borderRadius: 12 }} />
+          <SkeletonBox width="48%" height={48} style={{ borderRadius: 12 }} />
+        </View>
+      </View>
+
+      <View className="px-5 py-4">
+        <View
+          className="bg-white rounded-2xl mt-5 p-6 shadow-lg"
+          style={{ elevation: 3 }}
+        >
+          <SkeletonBox width={200} height={28} style={{ marginBottom: 20 }} />
+
+          {Array.from({ length: 4 }).map((_, index) => (
+            <View
+              key={index}
+              className="py-4 border-b border-gray-100 flex-row justify-between items-center"
+            >
+              <SkeletonBox width={80} height={20} />
+              <SkeletonBox width={120} height={20} />
+            </View>
+          ))}
+        </View>
+
+        <SkeletonBox
+          width="100%"
+          height={56}
+          style={{ marginTop: 32, borderRadius: 12 }}
+        />
+      </View>
+    </ScrollView>
+  </SafeAreaView>
+);
+
 export default function ProfileScreen() {
   const dispatch = useDispatch<AppDispatch>();
   const {
@@ -81,8 +160,8 @@ export default function ProfileScreen() {
         await ImagePicker.requestMediaLibraryPermissionsAsync();
       if (status !== "granted") {
         Alert.alert(
-          "Permission Needed",
-          "Permission to access media library is required!"
+          "Izin Diperlukan",
+          "Izin untuk mengakses galeri diperlukan!"
         );
         return;
       }
@@ -118,18 +197,20 @@ export default function ProfileScreen() {
         updateUser(formData as any, {
           onSuccess: () => {
             Alert.alert(
-              "Success",
+              "Berhasil",
               `${
-                imageType === "profile" ? "Profile image" : "Background photo"
-              } updated successfully`
+                imageType === "profile" ? "Foto profil" : "Foto latar belakang"
+              } berhasil diperbarui`
             );
           },
           onError: (error) => {
             Alert.alert(
-              "Error",
+              "Kesalahan",
               error.message ||
-                `Failed to update ${
-                  imageType === "profile" ? "profile image" : "background photo"
+                `Gagal memperbarui ${
+                  imageType === "profile"
+                    ? "foto profil"
+                    : "foto latar belakang"
                 }`
             );
           },
@@ -137,7 +218,7 @@ export default function ProfileScreen() {
       }
     } catch (error) {
       console.error("Error picking image:", error);
-      Alert.alert("Error", "Failed to pick image");
+      Alert.alert("Kesalahan", "Gagal memilih gambar");
     }
   };
 
@@ -151,17 +232,17 @@ export default function ProfileScreen() {
     updateUser(updateData, {
       onSuccess: () => {
         setIsEditMode(false);
-        Alert.alert("Success", "Profile updated successfully");
+        Alert.alert("Berhasil", "Profil berhasil diperbarui");
       },
       onError: (error) => {
-        Alert.alert("Error", error.message || "Failed to update profile");
+        Alert.alert("Kesalahan", error.message || "Gagal memperbarui profil");
       },
     });
   };
 
   const handleChangePassword = () => {
     if (newPassword !== confirmPassword) {
-      Alert.alert("Error", "New password and confirmation don't match");
+      Alert.alert("Kesalahan", "Kata sandi baru dan konfirmasi tidak cocok");
       return;
     }
 
@@ -169,10 +250,13 @@ export default function ProfileScreen() {
       onSuccess: () => {
         setIsPasswordModalVisible(false);
         resetPasswordFields();
-        Alert.alert("Success", "Password updated successfully");
+        Alert.alert("Berhasil", "Kata sandi berhasil diperbarui");
       },
       onError: (error) => {
-        Alert.alert("Error", error.message || "Failed to update password");
+        Alert.alert(
+          "Kesalahan",
+          error.message || "Gagal memperbarui kata sandi"
+        );
       },
     });
   };
@@ -198,12 +282,7 @@ export default function ProfileScreen() {
   };
 
   if (isLoading && !refreshing) {
-    return (
-      <SafeAreaView className="flex-1 bg-white items-center justify-center">
-        <ActivityIndicator size="large" color="#00FF00" />
-        <Text className="font-montserrat mt-4">Loading profile...</Text>
-      </SafeAreaView>
-    );
+    return <SkeletonProfile />;
   }
 
   return (
@@ -293,7 +372,7 @@ export default function ProfileScreen() {
               >
                 <Ionicons name="create-outline" size={18} color="#00CC00" />
                 <Text className="font-montserrat-medium ml-3 text-gray-800">
-                  Edit Profile
+                  Edit Profil
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity
@@ -310,7 +389,7 @@ export default function ProfileScreen() {
                   color="#00CC00"
                 />
                 <Text className="font-montserrat-medium ml-3 text-gray-800">
-                  Change Password
+                  Ubah Kata Sandi
                 </Text>
               </TouchableOpacity>
             </View>
@@ -352,7 +431,7 @@ export default function ProfileScreen() {
           </View>
 
           <Text className="font-montserrat-bold text-2xl mt-3 text-gray-800">
-            {userDetails?.name || "User Name"}
+            {userDetails?.name || "Nama Pengguna"}
           </Text>
           <Text className="font-montserrat text-gray-500 text-sm">
             {userDetails?.email || "user@example.com"}
@@ -367,7 +446,7 @@ export default function ProfileScreen() {
                 {userDetails?.points || 0}
               </Text>
               <Text className="font-montserrat-medium text-gray-500 text-xs mt-1">
-                POINTS
+                POIN
               </Text>
             </View>
 
@@ -378,7 +457,7 @@ export default function ProfileScreen() {
                 {formatRupiah(userDetails?.balance || 0)}
               </Text>
               <Text className="font-montserrat-medium text-gray-500 text-xs mt-1">
-                BALANCE
+                SALDO
               </Text>
             </View>
           </View>
@@ -392,7 +471,7 @@ export default function ProfileScreen() {
             >
               <Ionicons name="add-circle-outline" size={20} color="#00CC00" />
               <Text className="font-montserrat-bold text-gray-800 ml-2">
-                Top Up
+                Isi Saldo
               </Text>
             </TouchableOpacity>
 
@@ -408,7 +487,7 @@ export default function ProfileScreen() {
                 color="#00CC00"
               />
               <Text className="font-montserrat-bold text-gray-800 ml-2">
-                Withdraw
+                Tarik Saldo
               </Text>
             </TouchableOpacity>
           </View>
@@ -423,18 +502,20 @@ export default function ProfileScreen() {
               <View className="flex-row items-center mb-5">
                 <Ionicons name="person-outline" size={22} color="#00CC00" />
                 <Text className="font-montserrat-bold text-lg ml-3 text-gray-800">
-                  Personal Information
+                  Informasi Pribadi
                 </Text>
               </View>
 
               <View className="py-4 border-b border-gray-100 flex-row justify-between items-center">
-                <Text className="font-montserrat text-gray-500">Full Name</Text>
+                <Text className="font-montserrat text-gray-500">
+                  Nama Lengkap
+                </Text>
                 <Text
                   className="font-montserrat-medium text-gray-800 flex-1 text-right ml-2"
                   numberOfLines={1}
                   ellipsizeMode="tail"
                 >
-                  {userDetails?.name || "Not provided"}
+                  {userDetails?.name || "Belum diisi"}
                 </Text>
               </View>
 
@@ -445,29 +526,29 @@ export default function ProfileScreen() {
                   numberOfLines={1}
                   ellipsizeMode="tail"
                 >
-                  {userDetails?.email || "Not provided"}
+                  {userDetails?.email || "Belum diisi"}
                 </Text>
               </View>
 
               <View className="py-4 border-b border-gray-100 flex-row justify-between items-center">
-                <Text className="font-montserrat text-gray-500">Phone</Text>
+                <Text className="font-montserrat text-gray-500">Telepon</Text>
                 <Text
                   className="font-montserrat-medium text-gray-800 flex-1 text-right ml-2"
                   numberOfLines={1}
                   ellipsizeMode="tail"
                 >
-                  {userDetails?.phone || "Not provided"}
+                  {userDetails?.phone || "Belum diisi"}
                 </Text>
               </View>
 
               <View className="py-4 flex-row justify-between items-center">
-                <Text className="font-montserrat text-gray-500">Address</Text>
+                <Text className="font-montserrat text-gray-500">Alamat</Text>
                 <Text
                   className="font-montserrat-medium text-gray-800 flex-1 text-right ml-2"
                   numberOfLines={1}
                   ellipsizeMode="tail"
                 >
-                  {userDetails?.address || "Not provided"}
+                  {userDetails?.address || "Belum diisi"}
                 </Text>
               </View>
             </View>
@@ -480,7 +561,7 @@ export default function ProfileScreen() {
               >
                 <Ionicons name="log-out-outline" size={20} color="#FF3B30" />
                 <Text className="font-montserrat-bold text-red-500 ml-2">
-                  Logout
+                  Keluar
                 </Text>
               </TouchableOpacity>
             </View>
@@ -492,33 +573,33 @@ export default function ProfileScreen() {
               style={{ elevation: 5 }}
             >
               <Text className="font-montserrat-bold text-xl mb-5 text-gray-800">
-                Edit Profile
+                Edit Profil
               </Text>
 
               <View className="mb-5">
                 <Text className="font-montserrat-medium text-gray-600 mb-2">
-                  Full Name
+                  Nama Lengkap
                 </Text>
                 <TextInput
                   className="bg-gray-100 p-4 rounded-xl font-montserrat text-gray-800"
                   style={{ elevation: 1 }}
                   value={name}
                   onChangeText={setName}
-                  placeholder="Enter your full name"
+                  placeholder="Masukkan nama lengkap Anda"
                   placeholderTextColor="#aaaaaa"
                 />
               </View>
 
               <View className="mb-5">
                 <Text className="font-montserrat-medium text-gray-600 mb-2">
-                  Phone
+                  Telepon
                 </Text>
                 <TextInput
                   className="bg-gray-100 p-4 rounded-xl font-montserrat text-gray-800"
                   style={{ elevation: 1 }}
                   value={phone}
                   onChangeText={setPhone}
-                  placeholder="Enter your phone number"
+                  placeholder="Masukkan nomor telepon Anda"
                   keyboardType="phone-pad"
                   placeholderTextColor="#aaaaaa"
                 />
@@ -526,14 +607,14 @@ export default function ProfileScreen() {
 
               <View className="mb-8">
                 <Text className="font-montserrat-medium text-gray-600 mb-2">
-                  Address
+                  Alamat
                 </Text>
                 <TextInput
                   className="bg-gray-100 p-4 rounded-xl font-montserrat text-gray-800 h-24"
                   style={{ elevation: 1 }}
                   value={address}
                   onChangeText={setAddress}
-                  placeholder="Enter your address"
+                  placeholder="Masukkan alamat Anda"
                   multiline
                   textAlignVertical="top"
                   placeholderTextColor="#aaaaaa"
@@ -547,7 +628,7 @@ export default function ProfileScreen() {
                   activeOpacity={0.8}
                 >
                   <Text className="font-montserrat-bold text-gray-700 text-center">
-                    Cancel
+                    Batal
                   </Text>
                 </TouchableOpacity>
 
@@ -561,7 +642,7 @@ export default function ProfileScreen() {
                     <ActivityIndicator size="small" color="white" />
                   ) : (
                     <Text className="font-montserrat-bold text-white text-center">
-                      Save Changes
+                      Simpan Perubahan
                     </Text>
                   )}
                 </TouchableOpacity>
@@ -569,7 +650,7 @@ export default function ProfileScreen() {
 
               {updateUserError && (
                 <Text className="text-red-500 font-montserrat text-center mt-3">
-                  {updateUserError.message || "Error updating profile"}
+                  {updateUserError.message || "Kesalahan memperbarui profil"}
                 </Text>
               )}
             </View>
@@ -589,7 +670,7 @@ export default function ProfileScreen() {
           >
             <View className="flex-row justify-between items-center mb-6">
               <Text className="font-montserrat-bold text-lg text-gray-800">
-                Change Password
+                Ubah Kata Sandi
               </Text>
               <TouchableOpacity
                 className="w-8 h-8 rounded-full bg-gray-100 items-center justify-center"
@@ -604,14 +685,14 @@ export default function ProfileScreen() {
 
             <View className="mb-5">
               <Text className="font-montserrat-medium text-gray-600 mb-2">
-                New Password
+                Kata Sandi Baru
               </Text>
               <View className="flex-row items-center bg-gray-100 rounded-xl px-4">
                 <TextInput
                   className="flex-1 font-montserrat text-gray-800 p-4"
                   value={newPassword}
                   onChangeText={setNewPassword}
-                  placeholder="Enter new password"
+                  placeholder="Masukkan kata sandi baru"
                   secureTextEntry={!showNewPassword}
                   placeholderTextColor="#aaaaaa"
                 />
@@ -630,14 +711,14 @@ export default function ProfileScreen() {
 
             <View className="mb-7">
               <Text className="font-montserrat-medium text-gray-600 mb-2">
-                Confirm New Password
+                Konfirmasi Kata Sandi Baru
               </Text>
               <View className="flex-row items-center bg-gray-100 rounded-xl px-4">
                 <TextInput
                   className="flex-1 font-montserrat text-gray-800 p-4"
                   value={confirmPassword}
                   onChangeText={setConfirmPassword}
-                  placeholder="Confirm new password"
+                  placeholder="Konfirmasi kata sandi baru"
                   secureTextEntry={!showConfirmPassword}
                   placeholderTextColor="#aaaaaa"
                 />
@@ -666,14 +747,15 @@ export default function ProfileScreen() {
                 <ActivityIndicator size="small" color="white" />
               ) : (
                 <Text className="font-montserrat-bold text-white text-center text-base">
-                  Update Password
+                  Perbarui Kata Sandi
                 </Text>
               )}
             </TouchableOpacity>
 
             {updatePasswordError && (
               <Text className="text-red-500 font-montserrat text-center mt-3">
-                {updatePasswordError.message || "Error updating password"}
+                {updatePasswordError.message ||
+                  "Kesalahan memperbarui kata sandi"}
               </Text>
             )}
           </View>
@@ -695,10 +777,10 @@ export default function ProfileScreen() {
                 <Ionicons name="log-out" size={40} color="#FF3B30" />
               </View>
               <Text className="font-montserrat-bold text-xl text-gray-800">
-                Logout Confirmation
+                Konfirmasi Keluar
               </Text>
               <Text className="text-gray-600 text-center mt-3 font-montserrat">
-                Are you sure you want to logout from your account?
+                Apakah Anda yakin ingin keluar dari akun Anda?
               </Text>
             </View>
 
@@ -709,7 +791,7 @@ export default function ProfileScreen() {
                 activeOpacity={0.8}
               >
                 <Text className="font-montserrat-bold text-gray-700 text-center">
-                  Cancel
+                  Batal
                 </Text>
               </TouchableOpacity>
 
@@ -719,7 +801,7 @@ export default function ProfileScreen() {
                 activeOpacity={0.8}
               >
                 <Text className="font-montserrat-bold text-white text-center">
-                  Logout
+                  Keluar
                 </Text>
               </TouchableOpacity>
             </View>

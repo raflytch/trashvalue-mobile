@@ -334,10 +334,10 @@ export default function HomeScreen() {
             <View className="flex-row justify-between items-center mb-4">
               <View>
                 <Text className="font-montserrat-bold text-2xl text-white">
-                  Hello, {userDetails?.name?.split(" ")[0] || "User"}
+                  Halo, {userDetails?.name?.split(" ")[0] || "Pengguna"}
                 </Text>
                 <Text className="font-montserrat-bold text-white/90 text-lg mt-1">
-                  Welcome to TrashValue
+                  Selamat datang di TrashValue
                 </Text>
               </View>
               <TouchableOpacity
@@ -386,7 +386,7 @@ export default function HomeScreen() {
                 {formatRupiah(userDetails?.balance || 0)}
               </Text>
               <Text className="font-montserrat text-xs text-gray-500 uppercase">
-                Balance
+                Saldo
               </Text>
             </View>
             <View className="items-center flex-1 px-2 py-1 border-l border-r border-gray-100">
@@ -397,7 +397,7 @@ export default function HomeScreen() {
                 {userDetails?.points}
               </Text>
               <Text className="font-montserrat text-xs text-gray-500 uppercase">
-                Points
+                Poin
               </Text>
             </View>
             <View className="items-center flex-1 px-2 py-1">
@@ -408,7 +408,7 @@ export default function HomeScreen() {
                 {stats.totalDropoffs}
               </Text>
               <Text className="font-montserrat text-xs text-gray-500 uppercase">
-                Drop-offs
+                Dropoff
               </Text>
             </View>
           </View>
@@ -419,7 +419,7 @@ export default function HomeScreen() {
               <Ionicons name="flash" size={16} color="#00CC00" />
             </View>
             <Text className="font-montserrat-bold text-lg text-gray-800">
-              Quick Actions
+              Aksi Cepat
             </Text>
           </View>
           <View className="flex-row justify-between">
@@ -445,7 +445,7 @@ export default function HomeScreen() {
                   <Ionicons name="add-circle" size={24} color="white" />
                 </View>
                 <Text className="font-montserrat-semibold text-white text-center">
-                  Create Drop-off
+                  Buat Dropoff
                 </Text>
               </LinearGradient>
             </TouchableOpacity>
@@ -471,7 +471,7 @@ export default function HomeScreen() {
                   <Ionicons name="cash" size={24} color="white" />
                 </View>
                 <Text className="font-montserrat-semibold text-white text-center">
-                  Withdraw
+                  Tarik Saldo
                 </Text>
               </LinearGradient>
             </TouchableOpacity>
@@ -484,12 +484,12 @@ export default function HomeScreen() {
                 <Ionicons name="checkmark-circle" size={16} color="#00CC00" />
               </View>
               <Text className="font-montserrat-bold text-lg text-gray-800">
-                Completed Drop-offs
+                Dropoff Selesai
               </Text>
             </View>
             <TouchableOpacity onPress={navigateToHistory}>
               <Text className="font-montserrat-medium text-sm text-[#00CC00]">
-                View All
+                Lihat Semua
               </Text>
             </TouchableOpacity>
           </View>
@@ -539,7 +539,7 @@ export default function HomeScreen() {
                           <Text className="font-montserrat-semibold text-gray-800 text-base">
                             {dropoff.wasteItems && dropoff.wasteItems.length > 0
                               ? dropoff.wasteItems[0].wasteType?.name
-                              : "Mixed Recyclables"}
+                              : "Sampah Campuran"}
                           </Text>
                           <View className="flex-row items-center mt-1">
                             <Text className="font-montserrat text-xs text-gray-500 mr-3">
@@ -566,7 +566,7 @@ export default function HomeScreen() {
                   onPress={navigateToHistory}
                 >
                   <Text className="font-montserrat-semibold text-gray-600">
-                    View All History
+                    Lihat Semua Riwayat
                   </Text>
                 </TouchableOpacity>
               </View>
@@ -578,14 +578,14 @@ export default function HomeScreen() {
                   color="#CCCCCC"
                 />
                 <Text className="font-montserrat text-gray-500 mt-2">
-                  No completed drop-offs yet
+                  Belum ada dropoff yang selesai
                 </Text>
                 <TouchableOpacity
                   className="bg-green-500 px-4 py-2 rounded-full mt-4"
                   onPress={openDropoffModal}
                 >
                   <Text className="font-montserrat-semibold text-white">
-                    Create Your First Drop-off
+                    Buat Dropoff Pertama
                   </Text>
                 </TouchableOpacity>
               </View>
@@ -603,12 +603,12 @@ export default function HomeScreen() {
                 />
               </View>
               <Text className="font-montserrat-bold text-lg text-gray-800">
-                Waste Types
+                Jenis Sampah
               </Text>
             </View>
             <TouchableOpacity onPress={navigateToDropoff}>
               <Text className="font-montserrat-medium text-sm text-[#00CC00]">
-                View All
+                Lihat Semua
               </Text>
             </TouchableOpacity>
           </View>
