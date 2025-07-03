@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, StyleSheet, Image } from "react-native";
+import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
 import { Ionicons, FontAwesome5 } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { format } from "date-fns";
@@ -8,9 +8,13 @@ import { Dropoff } from "@/types/dropoff.types";
 
 interface DropoffHistoryItemProps {
   item: Dropoff;
+  onRefresh?: () => void;
 }
 
-export default function DropoffHistoryItem({ item }: DropoffHistoryItemProps) {
+export default function DropoffHistoryItem({
+  item,
+  onRefresh,
+}: DropoffHistoryItemProps) {
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     return format(date, "d MMMM yyyy", { locale: id });
@@ -38,7 +42,16 @@ export default function DropoffHistoryItem({ item }: DropoffHistoryItemProps) {
             <Text style={styles.completedText}>Selesai</Text>
           </View>
         </View>
-        <Text style={styles.headerAmount}>{formatMoney(item.totalAmount)}</Text>
+        <View style={styles.headerRight}>
+          <Text style={styles.headerAmount}>
+            {formatMoney(item.totalAmount)}
+          </Text>
+          {onRefresh && (
+            <TouchableOpacity style={styles.refreshButton} onPress={onRefresh}>
+              <Ionicons name="refresh" size={16} color="#00AA00" />
+            </TouchableOpacity>
+          )}
+        </View>
       </LinearGradient>
 
       <View style={styles.dropoffContent}>
@@ -70,17 +83,34 @@ export default function DropoffHistoryItem({ item }: DropoffHistoryItemProps) {
           </View>
         </View>
 
-        <View style={styles.contentRow}>
-          <View style={styles.iconContainer}>
-            <Ionicons name="location-outline" size={20} color="#00AA00" />
+        {item.wasteBank && (
+          <View style={styles.contentRow}>
+            <View style={styles.iconContainer}>
+              <Ionicons name="business-outline" size={20} color="#00AA00" />
+            </View>
+            <View style={styles.contentDetail}>
+              <Text style={styles.contentLabel}>Bank Sampah:</Text>
+              <Text style={styles.contentValue}>{item.wasteBank.name}</Text>
+              <Text style={styles.wasteBankAddress} numberOfLines={2}>
+                {item.wasteBank.address}
+              </Text>
+            </View>
           </View>
-          <View style={styles.contentDetail}>
-            <Text style={styles.contentLabel}>Alamat:</Text>
-            <Text style={styles.contentValue} numberOfLines={2}>
-              {item.pickupAddress}
-            </Text>
+        )}
+
+        {item.pickupAddress && (
+          <View style={styles.contentRow}>
+            <View style={styles.iconContainer}>
+              <Ionicons name="location-outline" size={20} color="#00AA00" />
+            </View>
+            <View style={styles.contentDetail}>
+              <Text style={styles.contentLabel}>Alamat Pickup:</Text>
+              <Text style={styles.contentValue} numberOfLines={2}>
+                {item.pickupAddress}
+              </Text>
+            </View>
           </View>
-        </View>
+        )}
 
         {item.wasteItems && item.wasteItems.length > 0 && (
           <View style={styles.wasteItemsContainer}>
@@ -145,6 +175,12 @@ const styles = StyleSheet.create({
   headerLeft: {
     flexDirection: "row",
     alignItems: "center",
+    flex: 1,
+  },
+  headerRight: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
   },
   headerDate: {
     fontFamily: "Montserrat-SemiBold",
@@ -167,6 +203,14 @@ const styles = StyleSheet.create({
     fontFamily: "Montserrat-Bold",
     fontSize: 16,
     color: "#00AA00",
+  },
+  refreshButton: {
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+    backgroundColor: "rgba(0, 170, 0, 0.1)",
+    justifyContent: "center",
+    alignItems: "center",
   },
   dropoffContent: {
     padding: 16,
@@ -197,6 +241,12 @@ const styles = StyleSheet.create({
     fontFamily: "Montserrat-SemiBold",
     fontSize: 14,
     color: "#333333",
+    marginTop: 2,
+  },
+  wasteBankAddress: {
+    fontFamily: "Montserrat-Medium",
+    fontSize: 12,
+    color: "#888888",
     marginTop: 2,
   },
   wasteItemsContainer: {

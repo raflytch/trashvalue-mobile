@@ -10,10 +10,13 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   Alert,
+  FlatList,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useCreateDropoff } from "@/hooks/useCreateDropoff";
+import { useWasteBanks } from "@/hooks/useWasteBank";
 import { WasteType } from "@/types/dropoff.types";
+import { WasteBank } from "@/types/waste-bank.types";
 
 interface DropoffModalProps {
   visible: boolean;
@@ -52,8 +55,47 @@ export default function DropoffModal({
   );
   const [notes, setNotes] = useState("");
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  const [selectedWasteBank, setSelectedWasteBank] = useState<WasteBank | null>(
+    null
+  );
+  const [wasteBankDropdownVisible, setWasteBankDropdownVisible] =
+    useState(false);
+  const [wasteBankPage, setWasteBankPage] = useState(1);
+  const [allWasteBanks, setAllWasteBanks] = useState<WasteBank[]>([]);
+  const [refreshKey, setRefreshKey] = useState(0);
 
+  const {
+    data: wasteBankData,
+    isLoading: wasteBankLoading,
+    refetch: refetchWasteBanks,
+  } = useWasteBanks(wasteBankPage, 5);
   const createDropoffMutation = useCreateDropoff();
+
+  React.useEffect(() => {
+    if (wasteBankData?.data) {
+      if (wasteBankPage === 1) {
+        setAllWasteBanks(wasteBankData.data);
+      } else {
+        setAllWasteBanks((prev) => {
+          const existingIds = prev.map((bank) => bank.id);
+          const newBanks = wasteBankData.data.filter(
+            (bank) => !existingIds.includes(bank.id)
+          );
+          return [...prev, ...newBanks];
+        });
+      }
+    }
+  }, [wasteBankData, wasteBankPage]);
+
+  React.useEffect(() => {
+    if (
+      wasteBankDropdownVisible &&
+      wasteBankPage === 1 &&
+      allWasteBanks.length === 0
+    ) {
+      setWasteBankPage(1);
+    }
+  }, [wasteBankDropdownVisible]);
 
   const handleSubmit = () => {
     const newErrors: { [key: string]: string } = {};
@@ -73,12 +115,22 @@ export default function DropoffModal({
     const [hours, minutes] = selectedTimeOption.split(":").map(Number);
     date.setHours(hours, minutes, 0, 0);
 
-    const payload = {
-      pickupAddress: pickupMethod === "DROPOFF" ? "" : pickupAddress,
-      pickupDate: date.toISOString(),
+    const payload: any = {
       pickupMethod,
-      notes: notes.trim() || undefined,
+      pickupDate: date.toISOString(),
     };
+
+    if (pickupMethod === "PICKUP" && pickupAddress.trim()) {
+      payload.pickupAddress = pickupAddress;
+    }
+
+    if (notes.trim()) {
+      payload.notes = notes.trim();
+    }
+
+    if (selectedWasteBank) {
+      payload.wasteBankId = selectedWasteBank.id;
+    }
 
     createDropoffMutation.mutate(payload, {
       onSuccess: () => {
@@ -107,6 +159,11 @@ export default function DropoffModal({
     setPickupMethod("PICKUP");
     setNotes("");
     setErrors({});
+    setSelectedWasteBank(null);
+    setWasteBankDropdownVisible(false);
+    setWasteBankPage(1);
+    setAllWasteBanks([]);
+    setRefreshKey(0);
   };
 
   const formatDate = (daysToAdd: number) => {
@@ -118,6 +175,43 @@ export default function DropoffModal({
       month: "long",
     });
   };
+
+  const handleLoadMore = () => {
+    if (wasteBankData?.metadata.hasNextPage && !wasteBankLoading) {
+      setWasteBankPage((prev) => prev + 1);
+    }
+  };
+
+  const handleOpenWasteBankDropdown = () => {
+    setWasteBankDropdownVisible(true);
+    if (allWasteBanks.length === 0) {
+      setWasteBankPage(1);
+    }
+  };
+
+  const handleRefreshWasteBanks = () => {
+    setAllWasteBanks([]);
+    setWasteBankPage(1);
+    setRefreshKey((prev) => prev + 1);
+    refetchWasteBanks();
+  };
+
+  const renderWasteBankItem = ({ item }: { item: WasteBank }) => (
+    <TouchableOpacity
+      className="p-4 border-b border-gray-100"
+      onPress={() => {
+        setSelectedWasteBank(item);
+        setWasteBankDropdownVisible(false);
+      }}
+    >
+      <Text className="font-montserrat-semibold text-gray-800">
+        {item.name}
+      </Text>
+      <Text className="font-montserrat text-gray-600 text-sm mt-1">
+        {item.address}
+      </Text>
+    </TouchableOpacity>
+  );
 
   return (
     <Modal
@@ -260,6 +354,32 @@ export default function DropoffModal({
 
                 <View className="mb-5">
                   <Text className="font-montserrat-semibold text-gray-700 mb-2">
+                    Bank Sampah
+                  </Text>
+                  <TouchableOpacity
+                    className="border border-gray-300 rounded-xl p-4 flex-row justify-between items-center"
+                    onPress={handleOpenWasteBankDropdown}
+                  >
+                    {selectedWasteBank ? (
+                      <View className="flex-1">
+                        <Text className="font-montserrat-semibold text-gray-800">
+                          {selectedWasteBank.name}
+                        </Text>
+                        <Text className="font-montserrat text-gray-600 text-sm mt-1">
+                          {selectedWasteBank.address}
+                        </Text>
+                      </View>
+                    ) : (
+                      <Text className="font-montserrat text-gray-500">
+                        Pilih Bank Sampah
+                      </Text>
+                    )}
+                    <Ionicons name="chevron-down" size={20} color="#9CA3AF" />
+                  </TouchableOpacity>
+                </View>
+
+                <View className="mb-5">
+                  <Text className="font-montserrat-semibold text-gray-700 mb-2">
                     Tanggal Pengambilan
                   </Text>
                   <View className="flex-row gap-2 mb-4">
@@ -354,6 +474,104 @@ export default function DropoffModal({
             </ScrollView>
           </View>
         </View>
+
+        <Modal
+          visible={wasteBankDropdownVisible}
+          transparent
+          animationType="fade"
+          onRequestClose={() => setWasteBankDropdownVisible(false)}
+        >
+          <View className="flex-1 bg-black/50 justify-center items-center">
+            <View className="bg-white rounded-xl mx-4 w-full max-w-md h-[500px]">
+              <View className="p-4 border-b border-gray-200 flex-row justify-between items-center">
+                <Text className="font-montserrat-bold text-lg text-gray-800">
+                  Pilih Bank Sampah
+                </Text>
+                <View className="flex-row items-center gap-2">
+                  <TouchableOpacity
+                    className="p-2 bg-green-50 rounded-lg"
+                    onPress={handleRefreshWasteBanks}
+                    disabled={wasteBankLoading}
+                  >
+                    <Ionicons
+                      name="refresh"
+                      size={20}
+                      color={wasteBankLoading ? "#9CA3AF" : "#00AA00"}
+                    />
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    className="p-2"
+                    onPress={() => setWasteBankDropdownVisible(false)}
+                  >
+                    <Ionicons name="close" size={24} color="#666" />
+                  </TouchableOpacity>
+                </View>
+              </View>
+
+              <View className="flex-1">
+                {wasteBankLoading && allWasteBanks.length === 0 ? (
+                  <View className="flex-1 justify-center items-center">
+                    <ActivityIndicator size="large" color="#00AA00" />
+                    <Text className="font-montserrat text-gray-600 mt-2">
+                      Memuat bank sampah...
+                    </Text>
+                  </View>
+                ) : (
+                  <FlatList
+                    data={allWasteBanks}
+                    renderItem={renderWasteBankItem}
+                    keyExtractor={(item, index) => `${item.id}_${index}`}
+                    showsVerticalScrollIndicator={false}
+                    onEndReached={handleLoadMore}
+                    onEndReachedThreshold={0.5}
+                    ListHeaderComponent={
+                      allWasteBanks.length > 0 ? (
+                        <View className="p-3 bg-gray-50">
+                          <Text className="font-montserrat text-gray-600 text-sm text-center">
+                            {allWasteBanks.length} bank sampah tersedia
+                          </Text>
+                        </View>
+                      ) : null
+                    }
+                    ListFooterComponent={
+                      wasteBankLoading && wasteBankPage > 1 ? (
+                        <View className="p-4 items-center">
+                          <ActivityIndicator size="small" color="#00AA00" />
+                        </View>
+                      ) : wasteBankData?.metadata.hasNextPage ? (
+                        <TouchableOpacity
+                          className="p-4 items-center border-t border-gray-100"
+                          onPress={handleLoadMore}
+                        >
+                          <Text className="font-montserrat-semibold text-green-600">
+                            Muat Lebih Banyak
+                          </Text>
+                        </TouchableOpacity>
+                      ) : null
+                    }
+                    ListEmptyComponent={
+                      !wasteBankLoading ? (
+                        <View className="flex-1 justify-center items-center">
+                          <Text className="font-montserrat-semibold text-gray-500 mb-2">
+                            Tidak ada bank sampah tersedia
+                          </Text>
+                          <TouchableOpacity
+                            className="mt-2 px-4 py-2 bg-green-500 rounded-lg"
+                            onPress={handleRefreshWasteBanks}
+                          >
+                            <Text className="font-montserrat-semibold text-white">
+                              Coba Lagi
+                            </Text>
+                          </TouchableOpacity>
+                        </View>
+                      ) : null
+                    }
+                  />
+                )}
+              </View>
+            </View>
+          </View>
+        </Modal>
       </KeyboardAvoidingView>
     </Modal>
   );

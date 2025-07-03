@@ -366,6 +366,24 @@ export default function DropoffList({
             </Text>
           </View>
         </View>
+        {item.wasteBank && (
+          <View style={styles.infoRow}>
+            <View style={styles.iconContainer}>
+              <Ionicons
+                name="business-outline"
+                size={moderateScale(20)}
+                color="#00AA00"
+              />
+            </View>
+            <View style={styles.infoContent}>
+              <Text style={styles.infoLabel}>Bank Sampah:</Text>
+              <Text style={styles.infoValue}>
+                {item.wasteBank.name}
+                {item.wasteBank.address ? `, ${item.wasteBank.address}` : ""}
+              </Text>
+            </View>
+          </View>
+        )}
         {item.notes && (
           <View style={styles.infoRow}>
             <View style={styles.iconContainer}>
