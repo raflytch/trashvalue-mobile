@@ -35,6 +35,11 @@ export interface Dropoff {
   createdAt: string;
   updatedAt: string;
   wasteItems: WasteItem[];
+  wasteBank: {
+    id: string;
+    name: string;
+    address: string;
+  };
 }
 
 export interface DropoffResponse {
@@ -49,10 +54,11 @@ export interface DropoffResponse {
 }
 
 export interface CreateDropoffPayload {
-  pickupAddress: string;
-  pickupDate: string;
-  pickupMethod: "PICKUP" | "DROPOFF";
+  pickupAddress?: string;
+  pickupDate?: string;
+  pickupMethod?: "PICKUP" | "DROPOFF";
   notes?: string;
+  wasteBankId?: string;
 }
 
 export interface CreateDropoffResponse {

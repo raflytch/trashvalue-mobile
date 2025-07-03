@@ -378,36 +378,96 @@ export default function HomeScreen() {
               elevation: 5,
             }}
           >
-            <View className="items-center flex-1 px-2 py-1">
+            <View className="items-center flex-1 px-2 py-1 min-w-[80px]">
               <View className="h-14 w-14 rounded-full bg-green-50 items-center justify-center mb-2 border border-green-100">
                 <Ionicons name="wallet-outline" size={24} color="#00CC00" />
               </View>
-              <Text className="font-montserrat-bold text-lg text-gray-800">
+              <Text
+                className="font-montserrat-bold text-xs text-gray-800"
+                style={{
+                  fontSize: 14,
+                  textAlign: "center",
+                  flexWrap: "wrap",
+                  width: "100%",
+                }}
+                numberOfLines={1}
+                adjustsFontSizeToFit
+              >
                 {formatRupiah(userDetails?.balance || 0)}
               </Text>
-              <Text className="font-montserrat text-xs text-gray-500 uppercase">
+              <Text
+                className="font-montserrat-medium text-[10px] text-gray-500 uppercase"
+                style={{
+                  fontSize: 10,
+                  textAlign: "center",
+                  flexWrap: "wrap",
+                  width: "100%",
+                }}
+                numberOfLines={1}
+                adjustsFontSizeToFit
+              >
                 Saldo
               </Text>
             </View>
-            <View className="items-center flex-1 px-2 py-1 border-l border-r border-gray-100">
+            <View className="items-center flex-1 px-2 py-1 border-l border-r border-gray-100 min-w-[80px]">
               <View className="h-14 w-14 rounded-full bg-green-50 items-center justify-center mb-2 border border-green-100">
                 <Ionicons name="star-outline" size={24} color="#00CC00" />
               </View>
-              <Text className="font-montserrat-bold text-lg text-gray-800">
+              <Text
+                className="font-montserrat-bold text-xs text-gray-800"
+                style={{
+                  fontSize: 14,
+                  textAlign: "center",
+                  flexWrap: "wrap",
+                  width: "100%",
+                }}
+                numberOfLines={1}
+                adjustsFontSizeToFit
+              >
                 {userDetails?.points}
               </Text>
-              <Text className="font-montserrat text-xs text-gray-500 uppercase">
+              <Text
+                className="font-montserrat text-[10px] text-gray-500 uppercase"
+                style={{
+                  fontSize: 10,
+                  textAlign: "center",
+                  flexWrap: "wrap",
+                  width: "100%",
+                }}
+                numberOfLines={1}
+                adjustsFontSizeToFit
+              >
                 Poin
               </Text>
             </View>
-            <View className="items-center flex-1 px-2 py-1">
+            <View className="items-center flex-1 px-2 py-1 min-w-[80px]">
               <View className="h-14 w-14 rounded-full bg-green-50 items-center justify-center mb-2 border border-green-100">
                 <Ionicons name="cube-outline" size={24} color="#00CC00" />
               </View>
-              <Text className="font-montserrat-bold text-lg text-gray-800">
+              <Text
+                className="font-montserrat-bold text-xs text-gray-800"
+                style={{
+                  fontSize: 14,
+                  textAlign: "center",
+                  flexWrap: "wrap",
+                  width: "100%",
+                }}
+                numberOfLines={1}
+                adjustsFontSizeToFit
+              >
                 {stats.totalDropoffs}
               </Text>
-              <Text className="font-montserrat text-xs text-gray-500 uppercase">
+              <Text
+                className="font-montserrat text-[10px] text-gray-500 uppercase"
+                style={{
+                  fontSize: 10,
+                  textAlign: "center",
+                  flexWrap: "wrap",
+                  width: "100%",
+                }}
+                numberOfLines={1}
+                adjustsFontSizeToFit
+              >
                 Dropoff
               </Text>
             </View>
