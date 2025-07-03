@@ -1,0 +1,89 @@
+{
+  "expo": {
+    "name": "TrashValue",
+    "slug": "trashvalue",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/logotrashvalue.png",
+    "scheme": "myapp",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/images/logotrashvalue.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#00CC00"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.trashvalue.app"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/logotrashvalue.png",
+        "backgroundColor": "#00CC00"
+      },
+      "softwareKeyboardLayoutMode": "pan",
+      "package": "com.trashvalue.app",
+      "versionCode": 1,
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.WRITE_EXTERNAL_STORAGE",
+        "android.permission.RECORD_AUDIO"
+      ]
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "static",
+      "favicon": "./assets/images/logotrashvalue.png"
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/images/logotrashvalue.png",
+          "imageWidth": 200,
+          "resizeMode": "contain",
+          "backgroundColor": "#00CC00",
+          "hideAfter": 3000
+        }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "TrashValue membutuhkan akses ke galeri Anda untuk memilih foto sampah."
+        }
+      ],
+      "expo-font",
+      "expo-secure-store"
+    ],
+    "androidStatusBar": {
+      "backgroundColor": "#000000",
+      "translucent": false,
+      "barStyle": "light-content"
+    },
+    "androidNavigationBar": {
+      "backgroundColor": "#ffffff"
+    },
+    "experiments": {
+      "typedRoutes": true
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "06f53465-8dc3-4370-9eda-b01f8fafb2a7"
+      }
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0,
+      "url": "https://u.expo.dev/7b74557a-8c87-4e69-907f-00be71e791f4"
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "owner": "raflyazizabdillah"
+  }
+}
