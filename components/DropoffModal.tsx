@@ -42,6 +42,13 @@ const TIME_OPTIONS = [
   "17:00",
 ];
 
+const WasteBankSkeleton = () => (
+  <View className="p-4 border-b border-gray-100">
+    <View className="bg-gray-200 h-5 w-3/4 rounded mb-2 animate-pulse" />
+    <View className="bg-gray-200 h-4 w-full rounded animate-pulse" />
+  </View>
+);
+
 export default function DropoffModal({
   visible,
   onClose,
@@ -198,20 +205,40 @@ export default function DropoffModal({
 
   const renderWasteBankItem = ({ item }: { item: WasteBank }) => (
     <TouchableOpacity
-      className="p-4 border-b border-gray-100"
+      className="p-4 border-b border-gray-100 active:bg-gray-50"
       onPress={() => {
         setSelectedWasteBank(item);
         setWasteBankDropdownVisible(false);
       }}
     >
-      <Text className="font-montserrat-semibold text-gray-800">
-        {item.name}
-      </Text>
-      <Text className="font-montserrat text-gray-600 text-sm mt-1">
-        {item.address}
-      </Text>
+      <View className="flex-row items-start">
+        <View className="w-10 h-10 bg-green-100 rounded-lg items-center justify-center mr-3">
+          <Ionicons name="business" size={20} color="#00AA00" />
+        </View>
+        <View className="flex-1">
+          <Text className="font-montserrat-semibold text-gray-800 text-base">
+            {item.name}
+          </Text>
+          <Text className="font-montserrat text-gray-600 text-sm mt-1 leading-5">
+            {item.address}
+          </Text>
+          <View className="flex-row items-center mt-2">
+            <View className="w-2 h-2 bg-green-500 rounded-full mr-2" />
+            <Text className="font-montserrat text-green-600 text-xs">
+              Aktif
+            </Text>
+          </View>
+        </View>
+        <Ionicons name="chevron-forward" size={16} color="#9CA3AF" />
+      </View>
     </TouchableOpacity>
   );
+
+  const renderSkeletonItems = () => {
+    return Array.from({ length: 5 }, (_, index) => (
+      <WasteBankSkeleton key={index} />
+    ));
+  };
 
   return (
     <Modal
@@ -357,22 +384,36 @@ export default function DropoffModal({
                     Bank Sampah
                   </Text>
                   <TouchableOpacity
-                    className="border border-gray-300 rounded-xl p-4 flex-row justify-between items-center"
+                    className="border border-gray-300 rounded-xl p-4 flex-row justify-between items-center bg-gray-50 active:bg-gray-100"
                     onPress={handleOpenWasteBankDropdown}
                   >
                     {selectedWasteBank ? (
-                      <View className="flex-1">
-                        <Text className="font-montserrat-semibold text-gray-800">
-                          {selectedWasteBank.name}
-                        </Text>
-                        <Text className="font-montserrat text-gray-600 text-sm mt-1">
-                          {selectedWasteBank.address}
-                        </Text>
+                      <View className="flex-1 flex-row items-center">
+                        <View className="w-8 h-8 bg-green-100 rounded-lg items-center justify-center mr-3">
+                          <Ionicons name="business" size={16} color="#00AA00" />
+                        </View>
+                        <View className="flex-1">
+                          <Text className="font-montserrat-semibold text-gray-800">
+                            {selectedWasteBank.name}
+                          </Text>
+                          <Text className="font-montserrat text-gray-600 text-sm mt-1">
+                            {selectedWasteBank.address}
+                          </Text>
+                        </View>
                       </View>
                     ) : (
-                      <Text className="font-montserrat text-gray-500">
-                        Pilih Bank Sampah
-                      </Text>
+                      <View className="flex-1 flex-row items-center">
+                        <View className="w-8 h-8 bg-gray-200 rounded-lg items-center justify-center mr-3">
+                          <Ionicons
+                            name="business-outline"
+                            size={16}
+                            color="#9CA3AF"
+                          />
+                        </View>
+                        <Text className="font-montserrat text-gray-500">
+                          Pilih Bank Sampah
+                        </Text>
+                      </View>
                     )}
                     <Ionicons name="chevron-down" size={20} color="#9CA3AF" />
                   </TouchableOpacity>
@@ -458,12 +499,24 @@ export default function DropoffModal({
                 </View>
 
                 <TouchableOpacity
-                  className="bg-green-500 py-4 rounded-xl items-center"
+                  className="bg-green-500 py-4 rounded-xl items-center shadow-lg"
                   onPress={handleSubmit}
                   disabled={createDropoffMutation.isPending}
+                  style={{
+                    shadowColor: "#00AA00",
+                    shadowOffset: { width: 0, height: 4 },
+                    shadowOpacity: 0.3,
+                    shadowRadius: 8,
+                    elevation: 8,
+                  }}
                 >
                   {createDropoffMutation.isPending ? (
-                    <ActivityIndicator size="small" color="white" />
+                    <View className="flex-row items-center">
+                      <ActivityIndicator size="small" color="white" />
+                      <Text className="font-montserrat-bold text-white text-base ml-2">
+                        Membuat Dropoff...
+                      </Text>
+                    </View>
                   ) : (
                     <Text className="font-montserrat-bold text-white text-base">
                       Buat Dropoff
@@ -482,14 +535,14 @@ export default function DropoffModal({
           onRequestClose={() => setWasteBankDropdownVisible(false)}
         >
           <View className="flex-1 bg-black/50 justify-center items-center">
-            <View className="bg-white rounded-xl mx-4 w-full max-w-md h-[500px]">
+            <View className="bg-white rounded-2xl mx-4 w-full max-w-md h-[600px] shadow-2xl">
               <View className="p-4 border-b border-gray-200 flex-row justify-between items-center">
                 <Text className="font-montserrat-bold text-lg text-gray-800">
                   Pilih Bank Sampah
                 </Text>
                 <View className="flex-row items-center gap-2">
                   <TouchableOpacity
-                    className="p-2 bg-green-50 rounded-lg"
+                    className="p-2 bg-green-50 rounded-lg active:bg-green-100"
                     onPress={handleRefreshWasteBanks}
                     disabled={wasteBankLoading}
                   >
@@ -500,7 +553,7 @@ export default function DropoffModal({
                     />
                   </TouchableOpacity>
                   <TouchableOpacity
-                    className="p-2"
+                    className="p-2 active:bg-gray-100 rounded-lg"
                     onPress={() => setWasteBankDropdownVisible(false)}
                   >
                     <Ionicons name="close" size={24} color="#666" />
@@ -510,12 +563,9 @@ export default function DropoffModal({
 
               <View className="flex-1">
                 {wasteBankLoading && allWasteBanks.length === 0 ? (
-                  <View className="flex-1 justify-center items-center">
-                    <ActivityIndicator size="large" color="#00AA00" />
-                    <Text className="font-montserrat text-gray-600 mt-2">
-                      Memuat bank sampah...
-                    </Text>
-                  </View>
+                  <ScrollView showsVerticalScrollIndicator={false}>
+                    {renderSkeletonItems()}
+                  </ScrollView>
                 ) : (
                   <FlatList
                     data={allWasteBanks}
@@ -526,8 +576,8 @@ export default function DropoffModal({
                     onEndReachedThreshold={0.5}
                     ListHeaderComponent={
                       allWasteBanks.length > 0 ? (
-                        <View className="p-3 bg-gray-50">
-                          <Text className="font-montserrat text-gray-600 text-sm text-center">
+                        <View className="p-3 bg-green-50 border-b border-green-100">
+                          <Text className="font-montserrat text-green-700 text-sm text-center">
                             {allWasteBanks.length} bank sampah tersedia
                           </Text>
                         </View>
@@ -537,10 +587,13 @@ export default function DropoffModal({
                       wasteBankLoading && wasteBankPage > 1 ? (
                         <View className="p-4 items-center">
                           <ActivityIndicator size="small" color="#00AA00" />
+                          <Text className="font-montserrat text-gray-500 text-xs mt-2">
+                            Memuat lebih banyak...
+                          </Text>
                         </View>
                       ) : wasteBankData?.metadata.hasNextPage ? (
                         <TouchableOpacity
-                          className="p-4 items-center border-t border-gray-100"
+                          className="p-4 items-center border-t border-gray-100 active:bg-gray-50"
                           onPress={handleLoadMore}
                         >
                           <Text className="font-montserrat-semibold text-green-600">
@@ -551,12 +604,22 @@ export default function DropoffModal({
                     }
                     ListEmptyComponent={
                       !wasteBankLoading ? (
-                        <View className="flex-1 justify-center items-center">
-                          <Text className="font-montserrat-semibold text-gray-500 mb-2">
+                        <View className="flex-1 justify-center items-center p-8">
+                          <View className="w-16 h-16 bg-gray-100 rounded-full items-center justify-center mb-4">
+                            <Ionicons
+                              name="business-outline"
+                              size={32}
+                              color="#9CA3AF"
+                            />
+                          </View>
+                          <Text className="font-montserrat-semibold text-gray-500 mb-2 text-center">
                             Tidak ada bank sampah tersedia
                           </Text>
+                          <Text className="font-montserrat text-gray-400 text-sm text-center mb-4">
+                            Coba refresh untuk memuat ulang data
+                          </Text>
                           <TouchableOpacity
-                            className="mt-2 px-4 py-2 bg-green-500 rounded-lg"
+                            className="mt-2 px-6 py-3 bg-green-500 rounded-xl active:bg-green-600"
                             onPress={handleRefreshWasteBanks}
                           >
                             <Text className="font-montserrat-semibold text-white">

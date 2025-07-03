@@ -609,6 +609,30 @@ export default function HistoryScreen() {
 
     return (
       <>
+        <View style={styles.refreshTopContainer}>
+          <TouchableOpacity
+            style={styles.refreshTopButton}
+            onPress={() => refetchDropoffs()}
+            disabled={isRefetchingDropoffs}
+          >
+            <Ionicons
+              name="refresh"
+              size={18}
+              color="#00AA00"
+              style={{ marginRight: 6 }}
+            />
+            <Text style={styles.refreshTopText}>
+              {isRefetchingDropoffs ? "Memperbarui..." : "Perbarui Data"}
+            </Text>
+            {isRefetchingDropoffs && (
+              <ActivityIndicator
+                size={16}
+                color="#00AA00"
+                style={{ marginLeft: 6 }}
+              />
+            )}
+          </TouchableOpacity>
+        </View>
         <FlatList
           data={dropoffData.data}
           renderItem={({ item }) => <DropoffHistoryItem item={item} />}
@@ -867,6 +891,26 @@ const styles = StyleSheet.create({
   listContainer: {
     paddingHorizontal: 16,
     paddingBottom: 16,
+  },
+  refreshTopContainer: {
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    alignItems: "center",
+    paddingHorizontal: 16,
+    marginBottom: 8,
+  },
+  refreshTopButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#E8F5E9",
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 8,
+  },
+  refreshTopText: {
+    fontFamily: "Montserrat-SemiBold",
+    fontSize: 14,
+    color: "#00AA00",
   },
   paginationContainer: {
     flexDirection: "row",
