@@ -12,7 +12,7 @@ import {
   Alert,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import MapView, { Marker } from "react-native-maps";
+import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import * as Location from "expo-location";
 import { useCreateDropoff } from "@/hooks/useCreateDropoff";
 import { WasteType } from "@/types/dropoff.types";
@@ -482,6 +482,7 @@ export default function DropoffModal({
           </View>
 
           <MapView
+            provider={PROVIDER_GOOGLE}
             style={{ flex: 1 }}
             region={selectedLocation}
             onPress={handleMapPress}

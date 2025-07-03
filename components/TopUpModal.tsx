@@ -49,9 +49,9 @@ export default function TopUpModal({ visible, onClose }: TopUpModalProps) {
 
     const numAmount = Number(amount.replace(/[^0-9]/g, ""));
     if (!amount || numAmount <= 0) {
-      newErrors.amount = "Please enter a valid amount";
+      newErrors.amount = "Masukkan jumlah yang valid";
     } else if (numAmount < 10000) {
-      newErrors.amount = "Minimum top-up amount is Rp10,000";
+      newErrors.amount = "Jumlah minimum top up adalah Rp10.000";
     }
 
     setErrors(newErrors);
@@ -119,7 +119,9 @@ export default function TopUpModal({ visible, onClose }: TopUpModalProps) {
             <TouchableOpacity onPress={handleClose} className="p-2">
               <Ionicons name="close" size={24} color="#333" />
             </TouchableOpacity>
-            <Text className="font-montserrat-bold text-lg ml-2">Payment</Text>
+            <Text className="font-montserrat-bold text-lg ml-2">
+              Pembayaran
+            </Text>
           </View>
           <WebView
             source={{ uri: paymentUrl }}
@@ -149,7 +151,7 @@ export default function TopUpModal({ visible, onClose }: TopUpModalProps) {
             <View className="px-6 py-5 border-b border-gray-100">
               <View className="flex-row justify-between items-center">
                 <Text className="font-montserrat-bold text-xl text-gray-800">
-                  Top Up Balance
+                  Isi Saldo
                 </Text>
                 <TouchableOpacity
                   className="w-8 h-8 rounded-full bg-gray-100 items-center justify-center"
@@ -163,7 +165,7 @@ export default function TopUpModal({ visible, onClose }: TopUpModalProps) {
             <ScrollView className="max-h-[500px]">
               <View className="px-6 py-5">
                 <Text className="font-montserrat-medium text-gray-600 mb-2">
-                  Amount
+                  Jumlah
                 </Text>
                 <View
                   className={`border-2 rounded-xl ${
@@ -216,7 +218,7 @@ export default function TopUpModal({ visible, onClose }: TopUpModalProps) {
 
                 <View className="mt-6 mb-4">
                   <Text className="font-montserrat-medium text-gray-600 mb-3">
-                    Payment Method
+                    Metode Pembayaran
                   </Text>
                   <View className="flex-row justify-between">
                     <TouchableOpacity
@@ -241,7 +243,7 @@ export default function TopUpModal({ visible, onClose }: TopUpModalProps) {
                             : "text-gray-600"
                         }`}
                       >
-                        Bank Transfer
+                        Transfer Bank
                       </Text>
                     </TouchableOpacity>
 
@@ -285,13 +287,13 @@ export default function TopUpModal({ visible, onClose }: TopUpModalProps) {
                   <ActivityIndicator size="small" color="white" />
                 ) : (
                   <Text className="text-white font-montserrat-bold text-center text-base">
-                    Top Up Now
+                    Isi Saldo Sekarang
                   </Text>
                 )}
               </TouchableOpacity>
               {topUpMutation.isError && (
                 <Text className="text-red-500 text-center mt-2 font-montserrat">
-                  Failed to process top-up. Please try again.
+                  Gagal memproses top up. Silakan coba lagi.
                 </Text>
               )}
             </View>
