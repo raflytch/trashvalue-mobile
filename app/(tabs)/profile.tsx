@@ -289,9 +289,9 @@ export default function ProfileScreen() {
           />
         }
       >
-        <View className="w-full h-56 relative">
+        <View className="w-full h-80 relative">
           {isUpdating ? (
-            <View className="w-full h-56 bg-gray-200 items-center justify-center">
+            <View className="w-full h-80 bg-gray-200 items-center justify-center">
               <ActivityIndicator color="#00FF00" size="large" />
             </View>
           ) : (
@@ -299,7 +299,7 @@ export default function ProfileScreen() {
               {userDetails?.backgroundPhoto ? (
                 <Image
                   source={{ uri: userDetails.backgroundPhoto }}
-                  className="w-full h-56"
+                  className="w-full h-80"
                   resizeMode="cover"
                 />
               ) : (
@@ -307,7 +307,7 @@ export default function ProfileScreen() {
                   colors={["#00CC00", "#00AA00", "#008800"]}
                   start={{ x: 0, y: 0 }}
                   end={{ x: 1, y: 1 }}
-                  className="w-full h-56"
+                  className="w-full h-80"
                 >
                   <View className="w-full h-full items-center justify-center relative">
                     <View className="absolute inset-0 opacity-10">
@@ -436,69 +436,59 @@ export default function ProfileScreen() {
               </TouchableOpacity>
             </View>
           )}
-        </View>
-        <View className="items-center -mt-16 px-5">
-          <View className="relative">
-            <View
-              className="h-32 w-32 rounded-full border-4 border-white shadow-xl bg-white overflow-hidden"
-              style={{
-                elevation: 8,
-                backgroundColor: "#fff",
-                alignItems: "center",
-                justifyContent: "center",
-                shadowColor: "#000",
-                shadowOpacity: 0.08,
-                shadowRadius: 8,
-                shadowOffset: { width: 0, height: 2 },
-              }}
-            >
+          <View
+            className="absolute bottom-0 left-0 w-full items-center"
+            style={{ transform: [{ translateY: 64 }] }}
+          >
+            <View className="relative">
               <View
+                className="h-32 w-32 rounded-full border-4 border-white shadow-xl bg-white overflow-hidden"
                 style={{
+                  elevation: 8,
                   backgroundColor: "#fff",
-                  borderRadius: 999,
-                  padding: 0,
                   alignItems: "center",
                   justifyContent: "center",
-                  width: "100%",
-                  height: "100%",
                   shadowColor: "#000",
                   shadowOpacity: 0.08,
                   shadowRadius: 8,
                   shadowOffset: { width: 0, height: 2 },
                 }}
               >
-                {isUpdating ? (
-                  <View className="flex-1 items-center justify-center">
-                    <ActivityIndicator color="#00FF00" size="large" />
-                  </View>
-                ) : userDetails?.profileImage ? (
-                  <Image
-                    source={{ uri: userDetails.profileImage }}
-                    className="h-full w-full"
-                    resizeMode="cover"
-                  />
-                ) : (
-                  <LinearGradient
-                    colors={["#fff", "#fff"]}
-                    style={{
-                      flex: 1,
-                      alignItems: "center",
-                      justifyContent: "center",
-                      width: "100%",
-                      height: "100%",
-                      borderRadius: 999,
-                    }}
-                  >
+                <View
+                  style={{
+                    backgroundColor: "#fff",
+                    borderRadius: 999,
+                    padding: 0,
+                    alignItems: "center",
+                    justifyContent: "center",
+                    width: "100%",
+                    height: "100%",
+                    shadowColor: "#000",
+                    shadowOpacity: 0.08,
+                    shadowRadius: 8,
+                    shadowOffset: { width: 0, height: 2 },
+                  }}
+                >
+                  {isUpdating ? (
+                    <View className="flex-1 items-center justify-center">
+                      <ActivityIndicator color="#00FF00" size="large" />
+                    </View>
+                  ) : userDetails?.profileImage ? (
+                    <Image
+                      source={{ uri: userDetails.profileImage }}
+                      className="h-full w-full"
+                      resizeMode="cover"
+                    />
+                  ) : (
                     <View
                       style={{
-                        backgroundColor: "#fff",
-                        borderRadius: 999,
-                        padding: 10,
+                        flex: 1,
                         alignItems: "center",
                         justifyContent: "center",
-                        width: 80,
-                        height: 80,
-                        marginBottom: 4,
+                        width: "100%",
+                        height: "100%",
+                        borderRadius: 999,
+                        backgroundColor: "#fff",
                       }}
                     >
                       <Image
@@ -511,20 +501,22 @@ export default function ProfileScreen() {
                         }}
                       />
                     </View>
-                  </LinearGradient>
-                )}
+                  )}
+                </View>
               </View>
+              <TouchableOpacity
+                className="absolute bottom-1 right-1 bg-white h-12 w-12 rounded-full items-center justify-center shadow-lg border-2 border-green-100"
+                style={{ elevation: 8 }}
+                onPress={() => handlePickImage("profile")}
+                disabled={isUpdating}
+                activeOpacity={0.8}
+              >
+                <Ionicons name="camera" size={20} color="#00CC00" />
+              </TouchableOpacity>
             </View>
-            <TouchableOpacity
-              className="absolute bottom-1 right-1 bg-white h-12 w-12 rounded-full items-center justify-center shadow-lg border-2 border-green-100"
-              style={{ elevation: 8 }}
-              onPress={() => handlePickImage("profile")}
-              disabled={isUpdating}
-              activeOpacity={0.8}
-            >
-              <Ionicons name="camera" size={20} color="#00CC00" />
-            </TouchableOpacity>
           </View>
+        </View>
+        <View className="items-center px-5 pt-16">
           <Text className="font-montserrat-bold text-2xl mt-3 text-gray-800">
             {userDetails?.name || "Nama Pengguna"}
           </Text>
