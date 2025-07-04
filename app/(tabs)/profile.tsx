@@ -529,7 +529,9 @@ export default function ProfileScreen() {
           >
             <View className="flex-1 items-center">
               <Text className="font-montserrat-bold text-lg text-[#00CC00]">
-                {userDetails?.points || 0}
+                {userDetails?.points
+                  ? userDetails.points.toLocaleString()
+                  : "0"}
               </Text>
               <Text className="font-montserrat-medium text-gray-500 text-xs mt-1">
                 POIN
