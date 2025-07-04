@@ -424,7 +424,9 @@ export default function HomeScreen() {
                 numberOfLines={1}
                 adjustsFontSizeToFit
               >
-                {userDetails?.points}
+                {userDetails?.points
+                  ? userDetails.points.toLocaleString()
+                  : "0"}
               </Text>
               <Text
                 className="font-montserrat text-[10px] text-gray-500 uppercase"

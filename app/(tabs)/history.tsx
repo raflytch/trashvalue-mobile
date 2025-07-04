@@ -572,67 +572,83 @@ export default function HistoryScreen() {
       );
     }
 
+    // Selalu tampilkan tombol refresh di tab dropoff
+    const dropoffRefreshButton = (
+      <View style={styles.refreshTopContainer}>
+        <TouchableOpacity
+          style={styles.refreshTopButton}
+          onPress={() => refetchDropoffs()}
+          disabled={isRefetchingDropoffs}
+        >
+          <Ionicons
+            name="refresh"
+            size={18}
+            color="#00AA00"
+            style={{ marginRight: 6 }}
+          />
+          <Text style={styles.refreshTopText}>
+            {isRefetchingDropoffs ? "Memperbarui..." : "Perbarui Data"}
+          </Text>
+          {isRefetchingDropoffs && (
+            <ActivityIndicator
+              size={16}
+              color="#00AA00"
+              style={{ marginLeft: 6 }}
+            />
+          )}
+        </TouchableOpacity>
+      </View>
+    );
+
     if (isDropoffLoading) {
-      return <DropoffHistorySkeleton />;
+      return (
+        <>
+          {dropoffRefreshButton}
+          <DropoffHistorySkeleton />
+        </>
+      );
     }
 
     if (isDropoffError) {
       return (
-        <View style={styles.errorContainer}>
-          <Ionicons name="alert-circle" size={60} color="#EF4444" />
-          <Text style={styles.errorTitle}>Gagal memuat data</Text>
-          <Text style={styles.errorMessage}>
-            Terjadi kesalahan saat mengambil riwayat dropoff
-          </Text>
-          <TouchableOpacity
-            style={styles.retryButton}
-            onPress={() => refetchDropoffs()}
-          >
-            <Ionicons name="refresh" size={20} color="white" />
-            <Text style={styles.retryButtonText}>Coba lagi</Text>
-          </TouchableOpacity>
-        </View>
+        <>
+          {dropoffRefreshButton}
+          <View style={styles.errorContainer}>
+            <Ionicons name="alert-circle" size={60} color="#EF4444" />
+            <Text style={styles.errorTitle}>Gagal memuat data</Text>
+            <Text style={styles.errorMessage}>
+              Terjadi kesalahan saat mengambil riwayat dropoff
+            </Text>
+            <TouchableOpacity
+              style={styles.retryButton}
+              onPress={() => refetchDropoffs()}
+            >
+              <Ionicons name="refresh" size={20} color="white" />
+              <Text style={styles.retryButtonText}>Coba lagi</Text>
+            </TouchableOpacity>
+          </View>
+        </>
       );
     }
 
     if (!dropoffData || dropoffData.data.length === 0) {
       return (
-        <View style={styles.emptyContainer}>
-          <Ionicons name="trash-bin-outline" size={80} color="#CCCCCC" />
-          <Text style={styles.emptyTitle}>Belum ada riwayat</Text>
-          <Text style={styles.emptyMessage}>
-            Anda belum memiliki dropoff yang selesai diproses
-          </Text>
-        </View>
+        <>
+          {dropoffRefreshButton}
+          <View style={styles.emptyContainer}>
+            <Ionicons name="trash-bin-outline" size={80} color="#CCCCCC" />
+            <Text style={styles.emptyTitle}>Belum ada riwayat</Text>
+            <Text style={styles.emptyMessage}>
+              Anda belum memiliki dropoff yang selesai diproses
+            </Text>
+          </View>
+        </>
       );
     }
 
     return (
       <>
-        <View style={styles.refreshTopContainer}>
-          <TouchableOpacity
-            style={styles.refreshTopButton}
-            onPress={() => refetchDropoffs()}
-            disabled={isRefetchingDropoffs}
-          >
-            <Ionicons
-              name="refresh"
-              size={18}
-              color="#00AA00"
-              style={{ marginRight: 6 }}
-            />
-            <Text style={styles.refreshTopText}>
-              {isRefetchingDropoffs ? "Memperbarui..." : "Perbarui Data"}
-            </Text>
-            {isRefetchingDropoffs && (
-              <ActivityIndicator
-                size={16}
-                color="#00AA00"
-                style={{ marginLeft: 6 }}
-              />
-            )}
-          </TouchableOpacity>
-        </View>
+        {dropoffRefreshButton}
         <FlatList
           data={dropoffData.data}
           renderItem={({ item }) => <DropoffHistoryItem item={item} />}

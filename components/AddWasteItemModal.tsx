@@ -140,7 +140,7 @@ export default function AddWasteItemModal({
     }).format(amount);
   };
 
-  const calculateReward = () => {
+  const calculatePoints = () => {
     if (
       !(wasteType || selectedWasteType) ||
       !weight ||
@@ -148,11 +148,20 @@ export default function AddWasteItemModal({
     ) {
       return 0;
     }
+    return (wasteType || selectedWasteType)!.pricePerKg * parseFloat(weight);
+  };
 
-    const basePrice =
-      (wasteType || selectedWasteType)!.pricePerKg * parseFloat(weight);
-    const pickupFee = pickupMethod === "PICKUP" ? 5000 * parseFloat(weight) : 0;
-    return basePrice - pickupFee;
+  const calculateSaldo = () => {
+    if (
+      !(wasteType || selectedWasteType) ||
+      !weight ||
+      isNaN(parseFloat(weight))
+    ) {
+      return 0;
+    }
+    return (
+      ((wasteType || selectedWasteType)!.pricePerKg * parseFloat(weight)) / 2
+    );
   };
 
   useEffect(() => {
@@ -266,7 +275,7 @@ export default function AddWasteItemModal({
                   <View className="bg-green-50 mt-2 p-3 rounded-lg border border-green-200">
                     <View className="mb-2">
                       <Text className="font-montserrat text-gray-600 text-sm">
-                        Harga dasar:{" "}
+                        Harga sampah:{" "}
                         {formatRupiah(
                           (wasteType || selectedWasteType)!.pricePerKg *
                             parseFloat(weight)
@@ -280,8 +289,16 @@ export default function AddWasteItemModal({
                       )}
                     </View>
                     <Text className="font-montserrat-semibold text-green-700">
-                      Perkiraan Reward: {formatRupiah(calculateReward())}
+                      Perkiraan Reward:
                     </Text>
+                    <View className="flex-row mt-1">
+                      <Text className="font-montserrat text-blue-700 mr-4">
+                        {`Points: ${formatRupiah(calculatePoints())}`}
+                      </Text>
+                      <Text className="font-montserrat text-green-700">
+                        {`Saldo: ${formatRupiah(calculateSaldo())}`}
+                      </Text>
+                    </View>
                   </View>
                 )}
             </View>
