@@ -1,14 +1,15 @@
 # TrashValue ♻️
 
-**TrashValue** adalah aplikasi manajemen sampah digital berbasis React Native dan [Expo](https://expo.dev) yang menghubungkan pengguna dengan bank sampah. Aplikasi ini memudahkan pengguna untuk menyetorkan sampah, mendapatkan imbalan berupa uang tunai atau poin digital, serta menyediakan fitur edukasi dan konsultasi pengelolaan sampah melalui chat AI berbasis Gemini.
+**TrashValue** adalah aplikasi manajemen sampah digital berbasis React Native dan [Expo](https://expo.dev) yang menghubungkan pengguna dengan bank sampah. Aplikasi ini memudahkan pengguna untuk menyetorkan sampah ke berbagai bank sampah, mendapatkan imbalan berupa uang tunai atau poin digital, serta menyediakan fitur edukasi dan konsultasi pengelolaan sampah melalui chat AI berbasis Gemini.
 
 ---
 
 ## Fitur Utama
 
-- **Setor Sampah Digital:** Pengguna dapat membuat permintaan dropoff, memilih jenis sampah, menentukan metode pengambilan (dijemput/antar sendiri), dan melacak status dropoff.
+- **Setor Sampah ke Bank Sampah:** Pengguna dapat membuat permintaan dropoff ke berbagai bank sampah yang tersedia, memilih jenis sampah, menentukan metode pengambilan (dijemput/antar sendiri), dan melacak status dropoff.
+- **Daftar Bank Sampah:** Lihat berbagai bank sampah yang tersedia di sekitar lokasi pengguna dengan informasi lengkap seperti alamat, jam operasional, dan jenis sampah yang diterima.
 - **Imbalan Tunai & Poin:** Setiap dropoff yang berhasil diproses akan menambah saldo tunai atau poin digital pengguna.
-- **Riwayat Transaksi & Dropoff:** Pantau seluruh aktivitas dropoff dan transaksi keuangan secara transparan.
+- **Riwayat Dropoff & Transaksi:** Pantau seluruh aktivitas dropoff dan transaksi keuangan secara transparan dalam satu halaman history.
 - **Top Up & Penarikan Saldo:** Pengguna dapat melakukan top up saldo dan penarikan dana ke rekening bank.
 - **Edukasi & Konsultasi AI:** Fitur chat AI berbasis Gemini untuk edukasi, tanya jawab, dan konsultasi seputar pengelolaan sampah.
 - **Profil & Pengaturan Akun:** Edit profil, unggah foto, dan kelola data pribadi.
@@ -65,26 +66,41 @@ trashvalue/
 
 ## Penjelasan Fitur
 
-### 1. **Dropoff Sampah**
+### 1. **Dropoff Sampah ke Bank Sampah**
 
+- Pilih bank sampah tujuan dari daftar bank sampah yang tersedia.
 - Pilih jenis sampah yang ingin disetorkan.
 - Tentukan metode pengambilan: **Dijemput** (oleh petugas) atau **Antar Sendiri** ke bank sampah.
 - Atur jadwal dan alamat pengambilan.
 - Tambahkan catatan atau foto sampah (opsional).
 - Lacak status dropoff: Pending, Diproses, Selesai.
 
-### 2. **Imbalan & Transaksi**
+### 2. **Daftar Bank Sampah**
+
+- Lihat daftar bank sampah yang tersedia di sekitar lokasi.
+- Informasi lengkap bank sampah: nama, alamat, jam operasional.
+- Jenis sampah yang diterima oleh masing-masing bank sampah.
+- Rating dan ulasan dari pengguna lain.
+
+### 3. **Imbalan & Transaksi**
 
 - Setiap dropoff yang selesai akan menambah saldo tunai/poin.
-- Cek riwayat transaksi dan detail dropoff.
+- Cek riwayat transaksi dan detail dropoff dalam satu halaman history.
 - Fitur **Top Up** dan **Penarikan** saldo ke rekening bank.
 
-### 3. **Edukasi & Chat AI**
+### 4. **History Dropoff & Transaksi**
+
+- Riwayat lengkap semua dropoff yang pernah dilakukan.
+- Detail transaksi keuangan: top up, penarikan, dan imbalan dropoff.
+- Filter berdasarkan tanggal, status, dan jenis transaksi.
+- Export data history ke PDF atau Excel.
+
+### 5. **Edukasi & Chat AI**
 
 - Konsultasi dan edukasi pengelolaan sampah melalui chat AI Gemini.
 - Tanya seputar jenis sampah, cara daur ulang, tips ramah lingkungan, dsb.
 
-### 4. **Profil Pengguna**
+### 6. **Profil Pengguna**
 
 - Edit data diri, foto profil, dan pengaturan akun.
 - Logout dan keamanan akun.
@@ -107,12 +123,11 @@ trashvalue/
 
 ## Konfigurasi Environment
 
-Buat file `.env` di root project untuk menyimpan variabel environment, misal:
+Buat file `.env` di root project untuk menyimpan variabel environment:
 
 ```
 EXPO_PUBLIC_API_URL=https://trashvalue-api.vercel.app/api/v1
 EXPO_MIDTRANS_CLIENT_KEY=SB-Mid-client-BtWr-N86OkdW2Qfn
-GEMINI_API_KEY=your_gemini_api_key
 ```
 
 ---
